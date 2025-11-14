@@ -11,7 +11,9 @@ public class AuthResponse {
     
     private String message;
 
-    private String  jwt;
+    private String  access_token;
+    
+    private String  refresh_token;
 
     private UserDto userDto;
 
