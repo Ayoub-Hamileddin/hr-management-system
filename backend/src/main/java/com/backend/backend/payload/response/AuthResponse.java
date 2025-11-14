@@ -1,0 +1,21 @@
+package com.backend.backend.payload.response;
+
+import com.backend.backend.payload.DTO.UserDto;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class AuthResponse {
+    
+    private String message;
+
+    private String  jwt;
+
+    private UserDto userDto;
+
+
+
+
+}
