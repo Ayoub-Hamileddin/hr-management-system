@@ -3,11 +3,11 @@ package com.backend.backend.config;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Base64.Decoder;
 import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -22,18 +22,25 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    private final String SECRET_KEY="wUEIsKbbjn+3Wgu6TzDOk5MZ3BD4TbXlzdXBlclNlY3JldGZvcnRoaXNhcHBoaGho";
+    @Value("${jwt.secret-key}")
+    private String secret_key ;
+
+    @Value("${jwt.access-token-expiration}")
+    private Long access_token_expiration;
+
+    @Value("${jwt.refresh-token-expiration}")
+    private Long refresh_token_expiration;
 
 
 
 
     public Claims extractAllClaims(String jwt){
         return Jwts
-        .parser()
-        .verifyWith(getSignKey())
+        .parserBuilder()
+        .setSigningKey(getSignKey())
         .build()
-        .parseSignedClaims(jwt)
-        .getPayload();
+        .parseClaimsJws(jwt)
+        .getBody();
     }
 
     
@@ -54,22 +61,33 @@ public class JwtService {
     }
 
 
-    public String generateToken(Map<String,Object> extraClaims,UserDetails userDetails){
+    public String generateAccessToken(Map<String,Object> extraClaims,UserDetails userDetails){
+
+        return genereteToken(extraClaims, userDetails, access_token_expiration);
+            
+    }
+
+    public String generateRefreshToken(Map<String,Object> extraClaims,UserDetails userDetails){
+
+        return genereteToken(extraClaims, userDetails, refresh_token_expiration);
+            
+    }
+
+
+    private String genereteToken(Map<String,Object> extraClaims,UserDetails userDetails,Long expireTime){
         return Jwts
         .builder()
         .setClaims(extraClaims!=null? extraClaims:new HashMap<>())
         .setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000*60*60*24))
+        .setExpiration(new Date(System.currentTimeMillis() + expireTime))
         .signWith(getSignKey())
         .compact();
-            
     }
-
     
 
     private SecretKey getSignKey(){
-        byte[]  keyBytes=Decoders.BASE64.decode(SECRET_KEY);
+        byte[]  keyBytes=Decoders.BASE64.decode(secret_key);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
