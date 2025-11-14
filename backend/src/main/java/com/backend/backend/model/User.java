@@ -19,7 +19,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,17 +32,24 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User implements UserDetails     {
     @Id
     @GeneratedValue
     private Long id;
 
-    private String fullName;
+    @NotBlank(message = "firstName cannot be empty")
+    private String firstName;
+
+    @NotBlank(message = "lastName cannot be empty")
+    private String lastName;
 
     @Email
     @Column(unique = true,nullable = false)
     private String email;
     
+    @NotBlank(message = "Password cannot be empty")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
     @Enumerated(EnumType.STRING)
