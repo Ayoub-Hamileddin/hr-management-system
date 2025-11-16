@@ -11,13 +11,17 @@ import org.springframework.stereotype.Service;
 import com.backend.backend.config.JwtService;
 import com.backend.backend.domain.Role;
 import com.backend.backend.mapper.UserMapper;
+import com.backend.backend.model.RefreshToken;
 import com.backend.backend.model.User;
 import com.backend.backend.payload.DTO.LoginRequest;
+import com.backend.backend.payload.DTO.RefreshRequest;
 import com.backend.backend.payload.DTO.RegisterRequest;
 import com.backend.backend.payload.DTO.UserDto;
 import com.backend.backend.payload.response.AuthResponse;
+import com.backend.backend.repository.RefreshTokenRespository;
 import com.backend.backend.repository.UserRepository;
 import com.backend.backend.service.AuthService;
+import com.backend.backend.service.RefreshTokenService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +32,8 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
+    private final RefreshTokenRespository refreshTokenRespository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -47,6 +53,9 @@ public class AuthServiceImpl implements AuthService {
         String access_token=jwtService.generateAccessToken(null, user);
         
         String refresh_token=jwtService.generateRefreshToken(null, user);
+
+                     //* create and save the refresh_token  */
+        refreshTokenService.createRefreshToken(user.getId(), refresh_token);
 
         return AuthResponse.builder()
             .access_token(access_token)
@@ -82,6 +91,9 @@ public class AuthServiceImpl implements AuthService {
         
        String refresh_token=jwtService.generateRefreshToken(null, user);
 
+                //* create and save the refresh_token  */
+       refreshTokenService.createRefreshToken(newUser.getId(), refresh_token);
+
        return AuthResponse.builder()
             .access_token(access_token)
             .refresh_token(refresh_token)
@@ -92,6 +104,17 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
+
+      @Override
+    public String logout(RefreshRequest refreshRequest) {
+        return refreshTokenRespository.findByToken(refreshRequest.getToken())
+        .map(token -> {
+                 token.setRevoked(true);
+                refreshTokenRespository.save(token);
+                return "logout Successfuly";
+                
+        }).orElse("invalid refreshToken");
+    }
 
 
 
@@ -109,5 +132,8 @@ public class AuthServiceImpl implements AuthService {
         return userMapper.toDto(connectedUser);
 
     }
+
+
+  
     
 }
