@@ -1,5 +1,6 @@
 package com.backend.backend.config;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,6 +60,15 @@ public class JwtService {
         String userName=extractUserName(jwt);
         return userName.equals(userDetails.getUsername());
     }
+
+    // public Boolean isTokenExpired(String token){
+        
+    //     return extractExpiredDate(token).before(new Date());
+    // }
+
+    // public Date extractExpiredDate(String token){
+    //     return extractClaim(token, Claims::getExpiration);
+    // }
 
 
     public String generateAccessToken(Map<String,Object> extraClaims,UserDetails userDetails){
