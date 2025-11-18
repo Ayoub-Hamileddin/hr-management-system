@@ -3,20 +3,16 @@ package com.backend.backend.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.backend.backend.config.JwtService;
-import com.backend.backend.model.User;
 import com.backend.backend.payload.DTO.LoginRequest;
 import com.backend.backend.payload.DTO.RefreshRequest;
 import com.backend.backend.payload.DTO.RegisterRequest;
 import com.backend.backend.payload.DTO.UserDto;
 import com.backend.backend.payload.response.AuthResponse;
-import com.backend.backend.repository.RefreshTokenRespository;
-import com.backend.backend.repository.UserRepository;
 import com.backend.backend.service.AuthService;
-import com.backend.backend.service.RefreshTokenService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,10 +26,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public class AuthController {
    
     private final AuthService authService;
-    private final JwtService jwtService;
-    private final RefreshTokenRespository refreshTokenRespository;                
-    private final UserRepository userRepository;              
-    private final RefreshTokenService refreshTokenService;
 
 
 
@@ -61,7 +53,6 @@ public class AuthController {
 
 
 
-
     @GetMapping("/me")
     public ResponseEntity<UserDto> me(@RequestHeader("Authorization") String jwt) {
        return ResponseEntity.ok(authService.me(jwt));
@@ -69,18 +60,17 @@ public class AuthController {
 
 
     @PostMapping("/refresh")
-    public ResponseEntity<String> refreshToken(@RequestBody RefreshRequest refreshRequest ){
-      return refreshTokenRespository.findByToken(refreshRequest.getToken())
-      .map(token -> {
-         if (refreshTokenService.isExpired(token) || refreshTokenService.revoke(token)) {
-               refreshTokenRespository.delete(token);
-                return ResponseEntity.badRequest().body("Refresh Token expired ,please login again");
-         }
-         User user=userRepository.findById(token.getUserId()).orElseThrow();
-         String newJwt=jwtService.generateAccessToken(null, user);
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshRequest refreshRequest ){
+     try {
 
-          return ResponseEntity.ok(newJwt);
-      }).orElse(ResponseEntity.badRequest().body("Invalid Refresh Token"));
+        AuthResponse response = authService.refreshAccessToken(refreshRequest.getToken());
+        return ResponseEntity.ok(response);
+
+    } catch (RuntimeException ex) {
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+
+    }
     }
 
 
