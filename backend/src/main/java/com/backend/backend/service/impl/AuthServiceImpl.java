@@ -98,7 +98,7 @@ public class AuthServiceImpl implements AuthService {
             .access_token(access_token)
             .refresh_token(refresh_token)
             .message("Register Successfuly")
-            .userDto(userMapper.toDto(newUser))
+           
 
        .build();
 
@@ -109,9 +109,8 @@ public class AuthServiceImpl implements AuthService {
     public String logout(RefreshRequest refreshRequest) {
         return refreshTokenRespository.findByToken(refreshRequest.getToken())
         .map(token -> {
-                 token.setRevoked(true);
-                refreshTokenRespository.save(token);
-                return "logout Successfuly";
+                 refreshTokenService.revokeToken(token);
+                 return "logout Successfuly";
                 
         }).orElse("invalid refreshToken");
     }
@@ -133,6 +132,39 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
+
+    @Override
+    public AuthResponse refreshAccessToken(String refreshToken) {
+        RefreshToken token = refreshTokenRespository.findByToken(refreshToken)
+        .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
+
+    if (token.getRevoked()) {
+        throw new RuntimeException("Refresh token revoked");
+    }
+
+    if (refreshTokenService.isExpired(token)) {
+        refreshTokenService.revokeToken(token);
+        throw new RuntimeException("Refresh token expired, please login again");
+    }
+
+    User user = token.getUser();
+    String newAccessToken = jwtService.generateAccessToken(null,user);
+    
+            AuthResponse authResponse= AuthResponse.builder()
+                .access_token(newAccessToken)
+                .refresh_token(token.getToken())
+                .message("Refresh Access Token")
+            .build();
+        return authResponse;
+    }
+
+
+
+
+
+    
+
+    
 
   
     
