@@ -14,4 +14,6 @@ public interface AuthService {
     UserDto me(String jwt);
 
     String logout(RefreshRequest refreshRequest);
+
+    AuthResponse refreshAccessToken(String refreshToken);
 }
