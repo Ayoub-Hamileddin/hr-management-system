@@ -25,11 +25,12 @@ public class RefreshToken {
     @GeneratedValue
     private Long id;
 
+
+    @Column(nullable = false)
     private String  token;
 
-
     @ManyToOne
-     @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User  user;
 
     @Column(name = "expire_date", nullable = false)
