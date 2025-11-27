@@ -1,5 +1,6 @@
 package com.backend.backend.payload.response;
 
+
 import com.backend.backend.payload.DTO.UserDto;
 
 import lombok.Builder;
@@ -15,7 +16,8 @@ public class AuthResponse {
     
     private String  refresh_token;
 
-    private UserDto userDto;
+    private UserDto user;
+
 
 
 
