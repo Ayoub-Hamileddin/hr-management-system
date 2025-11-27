@@ -1,6 +1,5 @@
 package com.backend.backend.config;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
@@ -61,14 +61,7 @@ public class JwtService {
         return userName.equals(userDetails.getUsername());
     }
 
-    // public Boolean isTokenExpired(String token){
-        
-    //     return extractExpiredDate(token).before(new Date());
-    // }
 
-    // public Date extractExpiredDate(String token){
-    //     return extractClaim(token, Claims::getExpiration);
-    // }
 
 
     public String generateAccessToken(Map<String,Object> extraClaims,UserDetails userDetails){
@@ -91,7 +84,7 @@ public class JwtService {
         .setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis() + expireTime))
-        .signWith(getSignKey())
+        .signWith(getSignKey(),SignatureAlgorithm.HS256)
         .compact();
     }
     
