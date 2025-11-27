@@ -6,12 +6,14 @@ import com.backend.backend.payload.DTO.RegisterRequest;
 import com.backend.backend.payload.DTO.UserDto;
 import com.backend.backend.payload.response.AuthResponse;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 public interface AuthService {
-    AuthResponse login(LoginRequest loginRequest);
+    AuthResponse login(LoginRequest loginRequest,HttpServletResponse response);
 
     AuthResponse register(RegisterRequest registerRequest);
 
-    UserDto me(String jwt);
+    UserDto me();
 
     String logout(RefreshRequest refreshRequest);
 
