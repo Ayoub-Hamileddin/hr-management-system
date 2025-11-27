@@ -10,10 +10,17 @@ import com.backend.backend.payload.DTO.UserDto;
 import com.backend.backend.payload.response.AuthResponse;
 import com.backend.backend.service.AuthService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,12 +33,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public class AuthController {
    
     private final AuthService authService;
-
+    @Value("${jwt.refresh-token-expiration}")
+    private Long refresh_token_expiration;
 
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-       return ResponseEntity.ok(authService.login(loginRequest));
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest,HttpServletResponse response) {
+       return ResponseEntity.ok(authService.login(loginRequest,response));
     }
 
 
@@ -54,17 +62,28 @@ public class AuthController {
 
 
     @GetMapping("/me")
-    public ResponseEntity<UserDto> me(@RequestHeader("Authorization") String jwt) {
-       return ResponseEntity.ok(authService.me(jwt));
+    public ResponseEntity<UserDto> me() {
+       return ResponseEntity.ok(authService.me());
     }
 
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshToken(@RequestBody RefreshRequest refreshRequest ){
+    public ResponseEntity<?> refreshToken(@CookieValue("refreshToken") String  refreshRequest ){
      try {
 
-        AuthResponse response = authService.refreshAccessToken(refreshRequest.getToken());
-        return ResponseEntity.ok(response);
+        AuthResponse response = authService.refreshAccessToken(refreshRequest);
+
+        ResponseCookie newRefreshCookie=ResponseCookie.from("refreshToken", response.getRefresh_token())
+               .httpOnly(true)
+               .secure(true)
+               .path("/")
+               .sameSite("None")
+               .maxAge(refresh_token_expiration)
+               .build();
+               
+         return ResponseEntity.ok()
+                                .header(HttpHeaders.SET_COOKIE, newRefreshCookie.toString())
+                                .body(response);
 
     } catch (RuntimeException ex) {
 
