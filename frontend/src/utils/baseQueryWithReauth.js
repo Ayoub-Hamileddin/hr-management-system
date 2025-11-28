@@ -15,13 +15,13 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
       {
         url: "/auth/refresh",
         method: "POST",
-        body: { refreshToken },
       },
       api,
       extraOptions
     );
     if (refreshResult?.data) {
-      api.dispatch(setCredentials({ ...refreshResult.data }));
+      const user = api.getState().auth.user;
+      api.dispatch(setCredentials({ ...refreshResult.data, user }));
       result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(logout());
