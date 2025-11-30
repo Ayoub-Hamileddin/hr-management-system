@@ -9,10 +9,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.backend.backend.Exceptions.BadRequestException;
+import com.backend.backend.Exceptions.EmailAlreadyExsitException;
+import com.backend.backend.Exceptions.NotFoundException;
+import com.backend.backend.Exceptions.UnauthorizedException;
 import com.backend.backend.config.JwtService;
 import com.backend.backend.domain.Role;
 import com.backend.backend.mapper.UserMapper;
@@ -55,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
         ) ;
 
         var user=userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(
-            ()->new UsernameNotFoundException("User not Found")
+            ()->new NotFoundException("user","User not Found")
         );
         String access_token=jwtService.generateAccessToken(null, user);
         
@@ -90,6 +93,11 @@ public class AuthServiceImpl implements AuthService {
                     //* register logic   */
     @Override
     public AuthResponse register(RegisterRequest registerRequest) {
+
+        userRepository.findByEmail(registerRequest.getEmail()).orElseThrow(
+            ()->new EmailAlreadyExsitException("Email already exist")
+        );
+
 
        var user=User.builder()
             .firstName(registerRequest.getFirstName())
@@ -129,7 +137,7 @@ public class AuthServiceImpl implements AuthService {
                  refreshTokenService.revokeToken(token);
                  return "logout Successfuly";
                 
-        }).orElse("invalid refreshToken");
+        }).orElseThrow(()->new BadRequestException("invalid refreshToken"));
     }
 
 
@@ -149,15 +157,15 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse refreshAccessToken(String refreshToken) {
         RefreshToken token = refreshTokenRespository.findByToken(refreshToken)
-        .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
+        .orElseThrow(() -> new NotFoundException("refreshToken","Invalid refresh token"));
 
     if (token.getRevoked()) {
-        throw new RuntimeException("Refresh token revoked");
+        throw new UnauthorizedException("Refresh token revoked");
     }
 
     if (refreshTokenService.isExpired(token)) {
         refreshTokenService.revokeToken(token);
-        throw new RuntimeException("Refresh token expired, please login again");
+        throw new UnauthorizedException("Refresh token expired, please login again");
     }
 
     User user = token.getUser();

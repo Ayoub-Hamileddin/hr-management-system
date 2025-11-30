@@ -11,6 +11,7 @@ import com.backend.backend.payload.response.AuthResponse;
 import com.backend.backend.service.AuthService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 
 @RestController
@@ -38,19 +38,19 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest,HttpServletResponse response) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest,HttpServletResponse response) {
        return ResponseEntity.ok(authService.login(loginRequest,response));
     }
 
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
        return ResponseEntity.ok(authService.register(registerRequest));
     }
 
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestBody RefreshRequest refreshRequest){
+    public ResponseEntity<String> logout(@Valid @RequestBody RefreshRequest refreshRequest){
          if (refreshRequest==null) {
                return ResponseEntity.badRequest().body("Refresh token is required");
          }
@@ -69,7 +69,7 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(@CookieValue("refreshToken") String  refreshRequest ){
-     try {
+    
 
         AuthResponse response = authService.refreshAccessToken(refreshRequest);
 
@@ -85,11 +85,7 @@ public class AuthController {
                                 .header(HttpHeaders.SET_COOKIE, newRefreshCookie.toString())
                                 .body(response);
 
-    } catch (RuntimeException ex) {
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
-
-    }
+   
     }
 
 

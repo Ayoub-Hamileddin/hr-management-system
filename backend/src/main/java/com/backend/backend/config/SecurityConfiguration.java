@@ -3,6 +3,8 @@ package com.backend.backend.config;
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,27 +24,32 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler  accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception{
         http
-        .csrf(csrf -> csrf.disable())   
-        .sessionManagement(
-            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        )
-        .authorizeRequests(
-            authorize -> authorize.requestMatchers("/api/auth/login","/api/auth/register","/api/auth/refresh").permitAll()
-            .anyRequest().authenticated()
-        )
+                .cors(withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeRequests(
+                        authorize -> authorize.requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/refresh").permitAll()
+                                .anyRequest().authenticated()
+                )
+                .exceptionHandling(ex -> ex
+                                .authenticationEntryPoint(authenticationEntryPoint)
+                                .accessDeniedHandler(accessDeniedHandler)
+                )
+                /*
+                *       it verifiying the credentials provided by a user sach as username and password against a known source of inforamation like a database .
+                *       if the authentiction success it return Authentication object represnting the authentication user
+                */      
+                .authenticationProvider(authenticationProvider)
 
-
-                        /*
-                        *       it verifiying the credentials provided by a user sach as username and password against a known source of inforamation like a database .
-                        *       if the authentiction success it return Authentication object represnting the authentication user
-                        */      
-        .authenticationProvider(authenticationProvider)
-
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
