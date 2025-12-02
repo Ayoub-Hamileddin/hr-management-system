@@ -60,6 +60,9 @@ public class AuthServiceImpl implements AuthService {
         var user=userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(
             ()->new NotFoundException("user","User not Found")
         );
+        if (!user.getIsActive()) {
+            throw new UnauthorizedException("you're account is Blocked");
+        }
         String access_token=jwtService.generateAccessToken(null, user);
         
         String refresh_token=jwtService.generateRefreshToken(null, user);
@@ -94,11 +97,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse register(RegisterRequest registerRequest) {
 
-        userRepository.findByEmail(registerRequest.getEmail()).orElseThrow(
-            ()->new EmailAlreadyExsitException("Email already exist")
-        );
-
-
+           if (userRepository.existsByEmail(registerRequest.getEmail())) {
+               throw new EmailAlreadyExsitException("Email already exist");
+            }
+        
        var user=User.builder()
             .firstName(registerRequest.getFirstName())
             .lastName(registerRequest.getLastName())
@@ -131,13 +133,13 @@ public class AuthServiceImpl implements AuthService {
 
 
       @Override
-    public String logout(RefreshRequest refreshRequest) {
-        return refreshTokenRespository.findByToken(refreshRequest.getToken())
-        .map(token -> {
-                 refreshTokenService.revokeToken(token);
-                 return "logout Successfuly";
-                
-        }).orElseThrow(()->new BadRequestException("invalid refreshToken"));
+    public String logout(String refreshRequest) {
+         RefreshToken token =  refreshTokenRespository.findByToken(refreshRequest)
+                       .orElseThrow(()->new BadRequestException("invalid refreshToken"));
+
+              refreshTokenService.revokeToken(token);
+
+              return "logout Successfuly";
     }
 
 
