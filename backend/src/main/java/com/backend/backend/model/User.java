@@ -56,8 +56,8 @@ public class User implements UserDetails     {
 
     @Enumerated(EnumType.STRING)
     private Role role;
- 
-    private Boolean isActive;
+    
+    private Boolean isActive; 
 
     private LocalDateTime createdAt;
 
