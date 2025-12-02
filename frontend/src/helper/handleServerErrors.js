@@ -8,8 +8,7 @@ export function handleServerErrors(error, setError, toast) {
    *  so we have to handle all these errors from the server
    */
 
-  const data = error?.data ?? error?.originalStatus ? error : null;
-
+  const data = error?.data;
 
   // errors map { field: message }
   if (
@@ -26,11 +25,9 @@ export function handleServerErrors(error, setError, toast) {
     return;
   }
 
-
-
   // errors array [{field, message}]
   if (Array.isArray(data?.errors)) {
-    data.errors.forEach(([errItem]) => {
+    data.errors.forEach((errItem) => {
       if (errItem.field) {
         setError(errItem.field, {
           type: "server",
@@ -43,18 +40,12 @@ export function handleServerErrors(error, setError, toast) {
     return;
   }
 
-
-
-
   // normal message
   if (data?.message) {
     toast.error(data.message);
     return;
   }
 
-
-
-  
   //   fallback: network / unknown
   toast.error("Something went wrong. Please try again.");
 }
