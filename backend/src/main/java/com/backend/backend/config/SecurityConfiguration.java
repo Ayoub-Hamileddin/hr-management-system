@@ -35,13 +35,13 @@ public class SecurityConfiguration {
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authorizeRequests(
-                        authorize -> authorize.requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/refresh").permitAll()
-                                .anyRequest().authenticated()
-                )
                 .exceptionHandling(ex -> ex
                                 .authenticationEntryPoint(authenticationEntryPoint)
                                 .accessDeniedHandler(accessDeniedHandler)
+                )
+                .authorizeHttpRequests(
+                        authorize -> authorize.requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/refresh").permitAll()
+                                .anyRequest().authenticated()
                 )
                 /*
                 *       it verifiying the credentials provided by a user sach as username and password against a known source of inforamation like a database .
