@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -50,7 +49,7 @@ public class AuthController {
 
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@Valid @RequestBody RefreshRequest refreshRequest){
+    public ResponseEntity<String> logout(@Valid @CookieValue("refreshToken") String  refreshRequest){
          if (refreshRequest==null) {
                return ResponseEntity.badRequest().body("Refresh token is required");
          }
