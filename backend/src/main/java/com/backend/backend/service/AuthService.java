@@ -15,7 +15,7 @@ public interface AuthService {
 
     UserDto me();
 
-    String logout(RefreshRequest refreshRequest);
+    String logout(String refreshRequest);
 
     AuthResponse refreshAccessToken(String refreshToken);
 }
