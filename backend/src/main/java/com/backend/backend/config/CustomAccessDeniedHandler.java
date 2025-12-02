@@ -15,11 +15,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 
 
 @Component
+@RequiredArgsConstructor
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+
+    private final ObjectMapper objectMapper;
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
@@ -36,7 +40,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
                     response.setContentType("application/json");
                     response.setStatus(HttpStatus.FORBIDDEN.value());
-                    response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
+                    response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
 
 }
