@@ -4,7 +4,7 @@ import { useRegisterMutation } from "../../features/auth/authApi";
 import { registerSchema } from "../../utils/RegisterSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import { handleServerErrors } from "../../helper/handleServerErrors";
 const Register = () => {
   const {
@@ -30,6 +30,8 @@ const Register = () => {
       toast.success("register successfuly");
       navigate("/login");
     } catch (error) {
+      console.log(error?.data);
+
       handleServerErrors(error, setError, toast);
     }
   };
@@ -50,7 +52,7 @@ const Register = () => {
                 <div>
                   <label
                     htmlFor="firstName"
-                    className="block mb-2 text-sm font-bold  text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium  text-gray-900 dark:text-white"
                   >
                     firstName
                   </label>
@@ -64,13 +66,15 @@ const Register = () => {
                     required=""
                   />
                   {errors.firstName && (
-                    <p className="text-red-600">{errors.firstName.message}</p>
+                    <p className="text-red-600 font-medium text-xs ">
+                      {errors.firstName.message}
+                    </p>
                   )}
                 </div>
                 <div>
                   <label
                     htmlFor="lastName"
-                    className="block mb-2 text-sm  font-bold text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
                   >
                     lastName
                   </label>
@@ -84,13 +88,15 @@ const Register = () => {
                     required=""
                   />
                   {errors.lastName && (
-                    <p className="text-red-600">{errors.lastName.message}</p>
+                    <p className="text-red-600 font-medium text-xs">
+                      {errors.lastName.message}
+                    </p>
                   )}
                 </div>
                 <div>
                   <label
                     htmlFor="email"
-                    className="block mb-2 text-sm  font-bold text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
                   >
                     email
                   </label>
@@ -104,13 +110,15 @@ const Register = () => {
                     required=""
                   />
                   {errors.email && (
-                    <p className="text-red-600">{errors.email.message}</p>
+                    <p className="text-red-600 font-medium text-xs">
+                      {errors.email.message}
+                    </p>
                   )}
                 </div>
                 <div>
                   <label
                     htmlFor="password"
-                    className="block mb-2 text-sm  font-bold text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
                   >
                     password
                   </label>
@@ -124,13 +132,15 @@ const Register = () => {
                     required=""
                   />
                   {errors.password && (
-                    <p className="text-red-600">{errors.password.message}</p>
+                    <p className="text-red-600 font-medium text-xs">
+                      {errors.password.message}
+                    </p>
                   )}
                 </div>
                 <div>
                   <label
                     htmlFor="confirmPassword"
-                    className="block mb-2 text-sm  font-bold text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
                   >
                     confirm password
                   </label>
@@ -144,7 +154,7 @@ const Register = () => {
                     required=""
                   />
                   {errors.confirmPassword && (
-                    <p className="text-red-600">
+                    <p className="text-red-600 font-medium text-xs">
                       {errors.confirmPassword.message}
                     </p>
                   )}
@@ -177,7 +187,9 @@ const Register = () => {
                   </div>
                 </div>
                 {errors.acceptTerms && (
-                  <p className="text-red-600">{errors.acceptTerms.message}</p>
+                  <p className="text-red-600 font-medium text-xs">
+                    {errors.acceptTerms.message}
+                  </p>
                 )}
                 <button
                   type="submit"
