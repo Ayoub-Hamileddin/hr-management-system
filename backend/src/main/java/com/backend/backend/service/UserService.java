@@ -1,10 +1,12 @@
 package com.backend.backend.service;
 
-import java.util.List;
-
 import com.backend.backend.payload.DTO.UserDto.UserDto;
 import com.backend.backend.payload.DTO.UserDto.UserUpdateDto;
+import com.backend.backend.payload.DTO.authDto.RegisterRequest;
+import com.backend.backend.payload.response.AuthResponse;
 import com.backend.backend.payload.response.DeleteResponse;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -12,7 +14,7 @@ public interface UserService {
 
     UserDto getUserById(Long id);
 
-    UserDto createUser(UserDto userDto);
+    AuthResponse createUser(RegisterRequest registerRequest);
 
     UserDto updateUser(UserUpdateDto updateDto,Long id);
 
