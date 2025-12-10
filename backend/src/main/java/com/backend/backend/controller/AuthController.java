@@ -3,10 +3,10 @@ package com.backend.backend.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.backend.backend.payload.DTO.LoginRequest;
-import com.backend.backend.payload.DTO.RefreshRequest;
-import com.backend.backend.payload.DTO.RegisterRequest;
-import com.backend.backend.payload.DTO.UserDto;
+import com.backend.backend.payload.DTO.UserDto.UserDto;
+import com.backend.backend.payload.DTO.authDto.LoginRequest;
+import com.backend.backend.payload.DTO.authDto.RefreshRequest;
+import com.backend.backend.payload.DTO.authDto.RegisterRequest;
 import com.backend.backend.payload.response.AuthResponse;
 import com.backend.backend.service.AuthService;
 
