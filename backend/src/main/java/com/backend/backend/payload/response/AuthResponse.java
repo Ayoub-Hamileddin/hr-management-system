@@ -1,7 +1,7 @@
 package com.backend.backend.payload.response;
 
 
-import com.backend.backend.payload.DTO.UserDto;
+import com.backend.backend.payload.DTO.UserDto.UserDto;
 
 import lombok.Builder;
 import lombok.Data;
