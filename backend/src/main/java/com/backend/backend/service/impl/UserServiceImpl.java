@@ -1,22 +1,24 @@
 package com.backend.backend.service.impl;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties.Http;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
 import com.backend.backend.Exceptions.NotFoundException;
+import com.backend.backend.Exceptions.UnauthorizedException;
+import com.backend.backend.domain.Role;
 import com.backend.backend.mapper.UserMapper;
 import com.backend.backend.model.User;
 import com.backend.backend.payload.DTO.UserDto.UserDto;
 import com.backend.backend.payload.DTO.UserDto.UserUpdateDto;
+import com.backend.backend.payload.DTO.authDto.RegisterRequest;
+import com.backend.backend.payload.response.AuthResponse;
 import com.backend.backend.payload.response.DeleteResponse;
 import com.backend.backend.repository.UserRepository;
 import com.backend.backend.service.UserService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService {
         private final UserRepository userRepository;
         private final UserMapper userMapper;
+        private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -44,26 +47,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto createUser(UserDto userDto) {
-        User user=userMapper.toEntity(userDto);
+    public AuthResponse createUser(RegisterRequest registerRequest) {
+        if (userRepository.existsByEmail(registerRequest.getEmail())){
+            throw new UnauthorizedException("Email already exist");
+        }
+
+        var user=User.builder()
+                .firstName(registerRequest.getFirstName())
+                .lastName(registerRequest.getLastName())
+                .email(registerRequest.getEmail())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .role(Role.ROLE_EMPLOYEE)
+                .isActive(true)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(null)
+                .build();
 
         User userSaved=userRepository.save(user);
 
-        return userMapper.toDto(userSaved);
+        return  AuthResponse.builder()
+                    .message("User created successfuly")
+                    .access_token(null)
+                    .refresh_token(null)
+                    .user(userMapper.toDto(userSaved))
+
+                .build();
     }
 
     @Override
-    public UserDto updateUser(UserUpdateDto userDto,Long id) {
+    public UserDto updateUser(UserUpdateDto userUpdateDto,Long id) {
 
         User user=userRepository.findById(id).orElseThrow(
             ()->new NotFoundException("user", "User Not found")
         );
 
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setEmail(userDto.getEmail());
-        user.setIsActive(userDto.getIsActive());
-        user.setUpdatedAt(LocalDateTime.now());
+         userMapper.updateUserFromDto(userUpdateDto, user);
 
         User userSaved=userRepository.save(user);
         return userMapper.toDto(userSaved);

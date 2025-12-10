@@ -1,7 +1,24 @@
 package com.backend.backend.service.impl;
 
-import java.time.LocalDateTime;
-
+import com.backend.backend.Exceptions.BadRequestException;
+import com.backend.backend.Exceptions.EmailAlreadyExsitException;
+import com.backend.backend.Exceptions.NotFoundException;
+import com.backend.backend.Exceptions.UnauthorizedException;
+import com.backend.backend.config.JwtService;
+import com.backend.backend.domain.Role;
+import com.backend.backend.mapper.UserMapper;
+import com.backend.backend.model.RefreshToken;
+import com.backend.backend.model.User;
+import com.backend.backend.payload.DTO.UserDto.UserDto;
+import com.backend.backend.payload.DTO.authDto.LoginRequest;
+import com.backend.backend.payload.DTO.authDto.RegisterRequest;
+import com.backend.backend.payload.response.AuthResponse;
+import com.backend.backend.repository.RefreshTokenRespository;
+import com.backend.backend.repository.UserRepository;
+import com.backend.backend.service.AuthService;
+import com.backend.backend.service.RefreshTokenService;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,27 +29,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.backend.backend.Exceptions.BadRequestException;
-import com.backend.backend.Exceptions.EmailAlreadyExsitException;
-import com.backend.backend.Exceptions.NotFoundException;
-import com.backend.backend.Exceptions.UnauthorizedException;
-import com.backend.backend.config.JwtService;
-import com.backend.backend.domain.Role;
-import com.backend.backend.mapper.UserMapper;
-import com.backend.backend.model.RefreshToken;
-import com.backend.backend.model.User;
-import com.backend.backend.payload.DTO.LoginRequest;
-import com.backend.backend.payload.DTO.RefreshRequest;
-import com.backend.backend.payload.DTO.RegisterRequest;
-import com.backend.backend.payload.DTO.UserDto;
-import com.backend.backend.payload.response.AuthResponse;
-import com.backend.backend.repository.RefreshTokenRespository;
-import com.backend.backend.repository.UserRepository;
-import com.backend.backend.service.AuthService;
-import com.backend.backend.service.RefreshTokenService;
-
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
