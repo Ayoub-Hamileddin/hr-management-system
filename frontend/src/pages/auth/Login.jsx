@@ -8,9 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
 import { handleServerErrors } from "../../helper/handleServerErrors";
 import { toast } from "sonner";
+
 const Login = () => {
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -19,7 +21,6 @@ const Login = () => {
   } = useForm({
     resolver: zodResolver(loginSchema),
   });
-  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
@@ -29,7 +30,7 @@ const Login = () => {
       });
       dispatch(setCredentials({ ...credentials }));
       toast.success("Login Successfuly");
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.log(error);
 
