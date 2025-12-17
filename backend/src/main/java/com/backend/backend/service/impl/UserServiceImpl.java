@@ -80,8 +80,12 @@ public class UserServiceImpl implements UserService {
         User user=userRepository.findById(id).orElseThrow(
             ()->new NotFoundException("user", "User Not found")
         );
-
          userMapper.updateUserFromDto(userUpdateDto, user);
+
+//         hashing the password
+        if (userUpdateDto.getPassword() !=null) {
+            user.setPassword(passwordEncoder.encode(userUpdateDto.getPassword()));
+        }
 
         User userSaved=userRepository.save(user);
         return userMapper.toDto(userSaved);
