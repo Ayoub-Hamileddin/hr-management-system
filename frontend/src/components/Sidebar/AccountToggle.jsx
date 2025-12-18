@@ -2,7 +2,7 @@ import React from "react";
 import { HiMiniChevronUpDown } from "react-icons/hi2";
 const AccountToggle = () => {
   return (
-    <div className="border-b pb-4 mt-2 border-stone-300 ">
+    <div className="border-b pb-4 mt-2 mb-4 border-stone-300 ">
       <button
         className="flex p-0.5 hover:bg-stone-200 rounded 
          transition-colors relative gap-2 w-full  items-center          "
