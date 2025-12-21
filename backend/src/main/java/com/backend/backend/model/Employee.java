@@ -45,6 +45,7 @@ public class Employee {
     private LocalDateTime hireDate;
 
     @ManyToOne
+    @JoinColumn(name = "department_id")
     private Department department;
 
     @OneToOne
