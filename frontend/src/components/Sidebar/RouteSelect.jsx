@@ -27,11 +27,11 @@ const RouteTemplate = ({ Icon, selected, text }) => {
       className={` flex items-center justify-start 
         gap-2 w-full rounded px-2 py-1.5 text-sm
         transition-[box-shadow,_background-color,_color]
-        text-stone-500 shadow-none
         ${selected ? "bg-white text-stone-950 shadow" : "hover:bg-stone-200 "}
+        text-stone-500 shadow-none
     `}
     >
-      <Icon />
+      <Icon className={` text-[16px]  ${selected ? "text-violet-600" : ""}`} />
       <span className="font-semibold">{text}</span>
     </Link>
   );
