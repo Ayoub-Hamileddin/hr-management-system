@@ -1,5 +1,6 @@
 package com.backend.backend.service.impl;
 
+import com.backend.backend.Exceptions.EmailAlreadyExsitException;
 import com.backend.backend.Exceptions.NotFoundException;
 import com.backend.backend.Exceptions.UnauthorizedException;
 import com.backend.backend.domain.Role;
@@ -8,6 +9,7 @@ import com.backend.backend.model.User;
 import com.backend.backend.payload.DTO.UserDto.UserDto;
 import com.backend.backend.payload.DTO.UserDto.UserUpdateDto;
 import com.backend.backend.payload.DTO.authDto.RegisterRequest;
+import com.backend.backend.payload.DTO.employeeDto.CreateEmployeeDto;
 import com.backend.backend.payload.response.AuthResponse;
 import com.backend.backend.payload.response.DeleteResponse;
 import com.backend.backend.repository.UserRepository;
@@ -104,5 +106,29 @@ public class UserServiceImpl implements UserService {
             .status(HttpStatus.NO_CONTENT.value())
         .build();
     }
+
+    @Override
+    public User createEmployeeUser(CreateEmployeeDto createEmployeeDto) {
+        boolean existingEmail=userRepository.existsByEmail(createEmployeeDto.getEmail());
+
+        if (existingEmail){
+            throw new EmailAlreadyExsitException("Employee email already exist");
+
+        }
+
+        return User.builder()
+
+                .firstName(createEmployeeDto.getFirstName())
+                .lastName(createEmployeeDto.getLastName())
+                .email(createEmployeeDto.getEmail())
+                .role(Role.ROLE_EMPLOYEE)
+                .password(null)
+                .isActive(false)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(null)
+
+                .build();
+    }
+
 
 }
