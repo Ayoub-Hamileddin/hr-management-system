@@ -1,8 +1,10 @@
 package com.backend.backend.service;
 
+import com.backend.backend.model.User;
 import com.backend.backend.payload.DTO.UserDto.UserDto;
 import com.backend.backend.payload.DTO.UserDto.UserUpdateDto;
 import com.backend.backend.payload.DTO.authDto.RegisterRequest;
+import com.backend.backend.payload.DTO.employeeDto.CreateEmployeeDto;
 import com.backend.backend.payload.response.AuthResponse;
 import com.backend.backend.payload.response.DeleteResponse;
 
@@ -19,5 +21,7 @@ public interface UserService {
     UserDto updateUser(UserUpdateDto updateDto,Long id);
 
     DeleteResponse deleteUser(Long id);
+
+    User createEmployeeUser(CreateEmployeeDto createEmployeeDto);
 
 }
