@@ -1,17 +1,24 @@
 package com.backend.backend.service.impl;
 
 import com.backend.backend.Exceptions.NotFoundException;
+import com.backend.backend.domain.Position;
 import com.backend.backend.mapper.EmployeeMapper;
+import com.backend.backend.model.Department;
 import com.backend.backend.model.Employee;
+import com.backend.backend.model.User;
 import com.backend.backend.payload.DTO.employeeDto.CreateEmployeeDto;
 import com.backend.backend.payload.DTO.employeeDto.EmployeeDto;
 import com.backend.backend.payload.DTO.employeeDto.UpdateEmployeeDto;
 import com.backend.backend.payload.response.DeleteResponse;
+import com.backend.backend.repository.DepartementRepository;
 import com.backend.backend.repository.EmployeeRepository;
 import com.backend.backend.service.EmployeeService;
+import com.backend.backend.service.InvitationService;
+import com.backend.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,6 +26,9 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
         private final EmployeeRepository employeeRepository;
         private final EmployeeMapper employeeMapper;
+        private final UserService userService;
+        private final DepartementRepository departementRepository;
+        private final InvitationService invitationService;
 
 
     //    get All employees
@@ -47,8 +57,29 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto createEmployee(CreateEmployeeDto createEmployeeDto) {
 
+        User user=userService.createEmployeeUser(createEmployeeDto);
 
-        return null;
+        Department department=departementRepository.findById(createEmployeeDto.getDepartmentId()).orElseThrow(
+                ()->new NotFoundException("departement","Departemnt Not found")
+        );
+
+        Employee employee=Employee.builder()
+
+                .firstName(createEmployeeDto.getFirstName())
+                .lastName(createEmployeeDto.getLastName())
+                .email(createEmployeeDto.getEmail())
+                .phone(createEmployeeDto.getPhone())
+                .department(department)
+                .position(Position.INTERN)
+                .salary(5000)
+                .user(user)
+                .hireDate(LocalDateTime.now())
+
+                .build();
+
+        invitationService.sendInvitation(user);
+
+        return employeeMapper.toDto(employee);
     }
 
     @Override
