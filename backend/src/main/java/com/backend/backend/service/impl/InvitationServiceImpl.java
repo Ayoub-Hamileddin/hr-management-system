@@ -32,7 +32,7 @@ public class InvitationServiceImpl implements InvitationService {
 
         tokenRepository.save(invitationToken);
 
-        String link="http://localhost:8080/set-password?token ="+ token   ;
+        String link="http://localhost:3000/set-password?token ="+ token   ;
 
         emailService.send(
                 user.getEmail(),
