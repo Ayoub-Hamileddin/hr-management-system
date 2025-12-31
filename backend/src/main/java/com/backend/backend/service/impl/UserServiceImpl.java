@@ -1,6 +1,6 @@
 package com.backend.backend.service.impl;
 
-import com.backend.backend.Exceptions.EmailAlreadyExsitException;
+import com.backend.backend.Exceptions.EmailAlreadyExistException;
 import com.backend.backend.Exceptions.NotFoundException;
 import com.backend.backend.Exceptions.UnauthorizedException;
 import com.backend.backend.domain.Role;
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
         boolean existingEmail=userRepository.existsByEmail(createEmployeeDto.getEmail());
 
         if (existingEmail){
-            throw new EmailAlreadyExsitException("Employee email already exist");
+            throw new EmailAlreadyExistException("Employee email already exist");
 
         }
 
