@@ -1,25 +1,24 @@
 package com.backend.backend.Exceptions;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import jakarta.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(EmailAlreadyExsitException.class)
-    public ResponseEntity<ErrorResponse> handleEmailExists(EmailAlreadyExsitException emailAlreadyExsitException,
+    @ExceptionHandler(EmailAlreadyExistException.class)
+    public ResponseEntity<ErrorResponse> handleEmailExists(EmailAlreadyExistException emailAlreadyExistException,
                                                                 HttpServletRequest request){
   
 
-            return buildErrorResponse(false,HttpStatus.CONFLICT,"EMAIL_ALREADY_EXISTS","email",emailAlreadyExsitException.getMessage(),request)  ;
+            return buildErrorResponse(false,HttpStatus.CONFLICT,"EMAIL_ALREADY_EXISTS","email",emailAlreadyExistException.getMessage(),request)  ;
                                                   
         }
 
