@@ -18,4 +18,4 @@ COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
 RUN ls -la /app
 
 EXPOSE 8080
-CMD ["java", "-jar", "/app/app.jar", "--spring.profiles.active=prod"]
+CMD ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
