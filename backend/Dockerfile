@@ -13,7 +13,7 @@ FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
 
-COPY --from=build /target/app.jar
+COPY --from=build /app/target/app.jar
 
 EXPOSE 8080
 CMD ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
