@@ -13,7 +13,7 @@ FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
 
-COPY --from=build target/app.jar.jar app.jar
+COPY --from=build /app/target/app.jar.jar app.jar
 
 RUN ls -la /app
 
