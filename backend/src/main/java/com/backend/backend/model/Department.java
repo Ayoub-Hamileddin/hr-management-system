@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -27,7 +28,7 @@ public class Department {
     private String Description;
 
     @OneToMany
-    private Employee employee;
+    private List<Employee> employees;
 
     private LocalDateTime createdAt;
 }
