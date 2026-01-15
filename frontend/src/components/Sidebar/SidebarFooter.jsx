@@ -24,7 +24,7 @@ const SidebarFooter = () => {
         <button
           onClick={() => setDark(!dark)}
           className={`flex items-center space-x-1  w-[100%] px-4 py-1.5  rounded-3xl transition-colors duration-300 ${
-            !dark ? "bg-white text-black" : "text-stone-300 "
+            !dark ? "bg-white text-black shadow-lg" : "text-stone-300 "
           } `}
         >
           <MdOutlineLightMode size={18} />
@@ -33,7 +33,7 @@ const SidebarFooter = () => {
         <button
           onClick={() => setDark(!dark)}
           className={`flex items-center space-x-1  w-[100%] px-4 py-1.5  rounded-3xl transition-colors duration-300  ${
-            dark ? "bg-white text-black" : "text-stone-300 "
+            dark ? "bg-white text-black shadow-lg " : "text-stone-300 "
           }  `}
         >
           <MdDarkMode size={18} />
@@ -45,5 +45,3 @@ const SidebarFooter = () => {
 };
 
 export default SidebarFooter;
-
-
