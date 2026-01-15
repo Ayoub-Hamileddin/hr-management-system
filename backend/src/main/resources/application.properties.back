@@ -1,0 +1,28 @@
+spring.datasource.url=jdbc:mysql://localhost:3307/hr_management_system
+spring.datasource.username=root
+spring.datasource.password=hamileddin2006
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+
+server.port=8080
+
+jwt.secret-key=722b3f3d3e20d628fa2efeab1c8b021cf7c3841d8653dedc9e15839af1e0f5c6
+jwt.access-token-expiration=3600000
+jwt.refresh-token-expiration=604800000
+
+
+
+#email service
+
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=ayoub.hamileddine@gmail.com
+spring.mail.password=bamuriqtfmlhuenz
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+
+#FROM EMAIL
+mail.service.from=ayoub.hamileddine@gmail.com

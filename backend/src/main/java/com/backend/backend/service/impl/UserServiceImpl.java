@@ -1,15 +1,20 @@
 package com.backend.backend.service.impl;
 
+import com.backend.backend.Exceptions.EmailAlreadyExistException;
 import com.backend.backend.Exceptions.NotFoundException;
 import com.backend.backend.Exceptions.UnauthorizedException;
 import com.backend.backend.domain.Role;
 import com.backend.backend.mapper.UserMapper;
+import com.backend.backend.model.InvitationToken;
 import com.backend.backend.model.User;
 import com.backend.backend.payload.DTO.UserDto.UserDto;
 import com.backend.backend.payload.DTO.UserDto.UserUpdateDto;
 import com.backend.backend.payload.DTO.authDto.RegisterRequest;
+import com.backend.backend.payload.DTO.employeeDto.CreateEmployeeDto;
+import com.backend.backend.payload.DTO.employeeDto.SetPasswordRequest;
 import com.backend.backend.payload.response.AuthResponse;
 import com.backend.backend.payload.response.DeleteResponse;
+import com.backend.backend.repository.InvitationTokenRepository;
 import com.backend.backend.repository.UserRepository;
 import com.backend.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +33,7 @@ public class UserServiceImpl implements UserService {
         private final UserRepository userRepository;
         private final UserMapper userMapper;
         private final PasswordEncoder passwordEncoder;
+        private final InvitationTokenRepository tokenRepository;
 
 
     @Override
@@ -104,5 +110,56 @@ public class UserServiceImpl implements UserService {
             .status(HttpStatus.NO_CONTENT.value())
         .build();
     }
+
+    @Override
+    public User createEmployeeUser(CreateEmployeeDto createEmployeeDto) {
+        boolean existingEmail=userRepository.existsByEmail(createEmployeeDto.getEmail());
+
+        if (existingEmail){
+            throw new EmailAlreadyExistException("Employee email already exist");
+        }
+
+        return User.builder()
+
+                .firstName(createEmployeeDto.getFirstName())
+                .lastName(createEmployeeDto.getLastName())
+                .email(createEmployeeDto.getEmail())
+                .role(Role.ROLE_EMPLOYEE)
+                .password(null)
+                .isActive(false)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(null)
+
+                .build();
+    }
+
+    @Override
+    public String setPassword(SetPasswordRequest passwordRequest) {
+        InvitationToken invitationToken=tokenRepository.findByToken(passwordRequest.getToken()).orElseThrow(
+                ()->new NotFoundException("InvitationToken","Invitation Token Not Found")
+        );
+
+        if (invitationToken.isUsed()){
+                throw new UnauthorizedException("Invitation token is used");
+        }
+
+        if (invitationToken.getExpireAt().isBefore(LocalDateTime.now())){
+                throw new UnauthorizedException("Invalid invitation token");
+        }
+
+        //getting the user from the invitation token
+        User user=invitationToken.getUser();
+
+        // update User password  null -> new password  : after activation
+        user.setPassword(passwordRequest.getPassword());
+            //save the password
+            userRepository.save(user);
+
+        //mark the token as used to never be used again;
+        invitationToken.setUsed(true);
+            tokenRepository.save(invitationToken);
+        return "Setting password successfuly";
+    }
+
 
 }

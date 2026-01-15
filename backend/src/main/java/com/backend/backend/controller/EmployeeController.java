@@ -20,7 +20,7 @@ public class EmployeeController {
 
     @PostMapping("/set-password")
     public ResponseEntity<String> activateEmployeeAccount(
-            @RequestBody  SetPasswordRequest setPasswordRequest
+            @RequestBody SetPasswordRequest setPasswordRequest
     )
     {
         userService.setPassword(setPasswordRequest);

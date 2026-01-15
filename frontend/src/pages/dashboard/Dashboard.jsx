@@ -4,7 +4,7 @@ import DashboardComponent from "../../components/dashboard/DashboardComponent";
 
 const Dashboard = () => {
   return (
-    <div className="grid gap-4  p-4 grid-cols-[220px,_1fr] bg-stone-100 text-stone-950 ">
+    <div className="grid gap-4  p-4 grid-cols-[220px,_1fr] bg-[#ffffff] text-stone-950 ">
       <Sidebar />
       <DashboardComponent />
     </div>
