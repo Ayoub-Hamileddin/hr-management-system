@@ -26,10 +26,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeDto> getAllEmployees() {
         List<Employee> employees=employeeRepository.findAll();
 
-            if (employees.isEmpty() || employees==null){
-                throw new NotFoundException("Employee","Employee Not Found");
-            }
-
         return employees.stream()
                 .map(employee-> employeeMapper.toDto(employee))
                 .toList();
