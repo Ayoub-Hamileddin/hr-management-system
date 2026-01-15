@@ -15,13 +15,13 @@ const ActivityGraph = () => {
     {
       name: "Page A",
       uv: 4000,
-      pv: 2400,
+      pv: 700,
       amt: 2400,
     },
     {
       name: "Page B",
-      uv: 3000,
-      pv: 1398,
+      uv: 4000,
+      pv: 9000,
       amt: 2210,
     },
     {
@@ -57,12 +57,8 @@ const ActivityGraph = () => {
   ];
 
   return (
-    <div className="col-span-8 border border-stone-300 overflow-hidden rounded ">
-      <div className="p-4">
-        <h3 className="flex items-center gap-1.5 font-medium">
-          <FiUser /> activity
-        </h3>
-      </div>
+    <div className=" ">
+      <h3 className="">Team Performance</h3>
       {/*  // TODO: our graph  */}
       <LineChart
         style={{
@@ -74,18 +70,18 @@ const ActivityGraph = () => {
         responsive
         data={data}
       >
-        <CartesianGrid strokeDasharray="3 3" />
+        {/* <CartesianGrid /> */}
         <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
         <YAxis width="auto" />
-        <Tooltip />
-        <Legend />
+        {/* <Tooltip /> */}
+        {/* <Legend /> */}
         <Line
           type="monotone"
           dataKey="pv"
-          stroke="#8884d8"
+          stroke="#F5C754"
           activeDot={{ r: 8 }}
         />
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="uv" stroke="#29A071" />
       </LineChart>
     </div>
   );
