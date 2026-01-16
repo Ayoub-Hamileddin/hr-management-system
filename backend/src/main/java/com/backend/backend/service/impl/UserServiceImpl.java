@@ -12,6 +12,7 @@ import com.backend.backend.payload.DTO.UserDto.UserUpdateDto;
 import com.backend.backend.payload.DTO.authDto.RegisterRequest;
 import com.backend.backend.payload.DTO.employeeDto.CreateEmployeeDto;
 import com.backend.backend.payload.DTO.employeeDto.SetPasswordRequest;
+import com.backend.backend.payload.DTO.employeeDto.UpdateEmployeeDto;
 import com.backend.backend.payload.response.AuthResponse;
 import com.backend.backend.payload.response.DeleteResponse;
 import com.backend.backend.repository.InvitationTokenRepository;
@@ -134,6 +135,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User updateUserFromEmployee(User user, UpdateEmployeeDto updateEmployeeDto) {
+        if (updateEmployeeDto.getFirstName()!=null){
+                user.setFirstName(updateEmployeeDto.getFirstName());
+        }
+        if (updateEmployeeDto.getLastName()!=null){
+                user.setLastName(updateEmployeeDto.getLastName());
+        }
+        if (updateEmployeeDto.getEmail()!=null){
+                user.setEmail(updateEmployeeDto.getEmail());
+        }
+        userRepository.save(user);
+
+        return user;
+    }
+
+    @Override
     public String setPassword(SetPasswordRequest passwordRequest) {
         InvitationToken invitationToken=tokenRepository.findByToken(passwordRequest.getToken()).orElseThrow(
                 ()->new NotFoundException("InvitationToken","Invitation Token Not Found")
@@ -158,6 +175,8 @@ public class UserServiceImpl implements UserService {
         //mark the token as used to never be used again;
         invitationToken.setUsed(true);
             tokenRepository.save(invitationToken);
+
+
         return "Setting password successfuly";
     }
 
