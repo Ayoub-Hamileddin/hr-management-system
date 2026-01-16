@@ -33,7 +33,7 @@ public class CreateEmployeeDto {
     @NotBlank(message = "position cannot be empty")
     private Position position;
 
-    private double salary;
+    private Double salary;
 
     @NotBlank(message = "department id cannot be empty")
     private Long  departmentId;
