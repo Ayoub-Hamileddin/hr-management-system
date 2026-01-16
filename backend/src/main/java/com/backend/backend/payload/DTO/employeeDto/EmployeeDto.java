@@ -30,7 +30,7 @@ public class EmployeeDto {
 
     private String position;
 
-    private double salary;
+    private Double salary;
 
 
     private LocalDateTime hireDate;
