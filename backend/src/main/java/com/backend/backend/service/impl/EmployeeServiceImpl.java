@@ -1,6 +1,7 @@
 package com.backend.backend.service.impl;
 
 import com.backend.backend.Exceptions.NotFoundException;
+import com.backend.backend.domain.EmployeeStatus;
 import com.backend.backend.domain.Position;
 import com.backend.backend.mapper.EmployeeMapper;
 import com.backend.backend.model.Department;
@@ -12,11 +13,14 @@ import com.backend.backend.payload.DTO.employeeDto.UpdateEmployeeDto;
 import com.backend.backend.payload.response.DeleteResponse;
 import com.backend.backend.repository.DepartementRepository;
 import com.backend.backend.repository.EmployeeRepository;
+import com.backend.backend.repository.UserRepository;
 import com.backend.backend.service.EmployeeService;
 import com.backend.backend.service.InvitationService;
 import com.backend.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
         private final EmployeeRepository employeeRepository;
+        private final UserRepository userRepository;
         private final EmployeeMapper employeeMapper;
         private final UserService userService;
         private final DepartementRepository departementRepository;
@@ -51,6 +56,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public EmployeeDto createEmployee(CreateEmployeeDto createEmployeeDto) {
 
         User user=userService.createEmployeeUser(createEmployeeDto);
@@ -61,9 +67,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employee employee=Employee.builder()
 
-                .firstName(createEmployeeDto.getFirstName())
-                .lastName(createEmployeeDto.getLastName())
-                .email(createEmployeeDto.getEmail())
                 .phone(createEmployeeDto.getPhone())
                 .department(department)
                 .position(Position.INTERN)
@@ -79,18 +82,57 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public EmployeeDto updateEmployee(Long employeeId, UpdateEmployeeDto updateEmployeeDto) {
+        //find employee
+        Employee  employee= employeeRepository.findById(employeeId).orElseThrow(
+                ()->new NotFoundException("employee","Employee not found ")
+        );
 
-        return null;
+        //update user
+        userService.updateUserFromEmployee(employee.getUser(),updateEmployeeDto);
+
+        //update employee
+        employeeMapper.updateEmployeeFromDto(updateEmployeeDto,employee);
+            employeeRepository.save(employee);
+
+        //retrun employee dto
+        return employeeMapper.toDto(employee);
     }
 
     @Override
-    public DeleteResponse deleteEmployee(Long employeeId) {
-        return null;
+    @Transactional
+    public DeleteResponse deleteEmployee(Long employeeId)
+    {
+        //the Soft delete
+
+
+        Employee employee=employeeRepository.findById(employeeId).orElseThrow(
+                ()-> new NotFoundException("employee","Employee Not found")
+        ) ;
+            employee.setStatus(EmployeeStatus.INACTIVE);
+
+
+
+        User user=employee.getUser();
+            user.setIsActive(false);
+            userRepository.save(user);
+        return DeleteResponse.builder()
+                .message("employee deleted successfuly")
+                .userId(user.getId())
+                .status(HttpStatus.NO_CONTENT.value())
+                .build();
     }
 
+
+
+
     @Override
-    public EmployeeDto SearchEmployeeByName(String name) {
-        return null;
+    public List<EmployeeDto> SearchEmployeeByName(String name) {
+        List<Employee> employees=employeeRepository.findUserFirstNameByEmployeeName(name);
+        return employees
+                .stream()
+                .map(employee -> employeeMapper.toDto(employee))
+                .toList();
     }
 }
