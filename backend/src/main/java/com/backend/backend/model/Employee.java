@@ -4,10 +4,8 @@ package com.backend.backend.model;
 import com.backend.backend.domain.EmployeeStatus;
 import com.backend.backend.domain.Position;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -22,18 +20,6 @@ public class Employee {
     @Id
     @GeneratedValue
     private Long id;
-
-    @NotBlank(message = "firstName cannot be empty")
-    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
-    private String firstName;
-
-    @NotBlank(message = "lastName cannot be empty")
-    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
-    private String lastName;
-
-    @Email
-    @Column(unique = true,nullable = false)
-    private String email;
 
     @Pattern(regexp = "^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$")
     @NotBlank(message = "phone cannot be empty")
