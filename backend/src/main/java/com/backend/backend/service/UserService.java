@@ -6,6 +6,7 @@ import com.backend.backend.payload.DTO.UserDto.UserUpdateDto;
 import com.backend.backend.payload.DTO.authDto.RegisterRequest;
 import com.backend.backend.payload.DTO.employeeDto.CreateEmployeeDto;
 import com.backend.backend.payload.DTO.employeeDto.SetPasswordRequest;
+import com.backend.backend.payload.DTO.employeeDto.UpdateEmployeeDto;
 import com.backend.backend.payload.response.AuthResponse;
 import com.backend.backend.payload.response.DeleteResponse;
 
@@ -25,6 +26,9 @@ public interface UserService {
 
     User createEmployeeUser(CreateEmployeeDto createEmployeeDto);
 
+    User updateUserFromEmployee (User user, UpdateEmployeeDto updateEmployeeDto);
+
     String setPassword(SetPasswordRequest passwordRequest);
+
 
 }
