@@ -37,15 +37,17 @@ const Grid = () => {
           />
           <StatCard
             title="Resigned Employees"
-            value="93"
-            percentage={25.5}
+
+            value={"93"}
+            percentage={"-25.5 %"}
+            trend="down"
             Icon={FaMinus}
           />
         </div>
         <div className="col-span-7 bg-white">
           <ActivityGraph />
         </div>
-      </div>
+      </div>;
     </div>
   );
 };
