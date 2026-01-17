@@ -1,0 +1,33 @@
+stages:
+  - test
+  - build
+
+# ================= BACKEND =================
+backend-test:
+  stage: test
+  image: maven:3.9.6-eclipse-temurin-17
+  script:
+    - cd backend
+    - mvn test
+
+backend-build:
+  stage: build
+  image: maven:3.9.6-eclipse-temurin-17
+  script:
+    - cd backend
+    - mvn clean package -DskipTests
+  artifacts:
+    paths:
+      - backend/target/*.jar
+
+# ================= FRONTEND =================
+frontend-build:
+  stage: build
+  image: node:20
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/dist

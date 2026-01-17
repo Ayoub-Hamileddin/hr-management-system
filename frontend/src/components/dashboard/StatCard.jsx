@@ -1,22 +1,17 @@
 import React from "react";
 import { FiTrendingDown, FiTrendingUp } from "react-icons/fi";
 
-const StatCard = ({ value, title, Icon, percentage, trend }) => {
+const StatCard = ({ value, title, Icon, percentage }) => {
   return (
-    <div className="bg-white p-8    ">
-      <div className=" size-[50px] rounded-full bg-[#F8F8F8] flex justify-center items-center">
-        <Icon className="size-5" />
+    <div className=" bg-white">
+      <div>
+        <Icon />
       </div>
-      <div className=" mt-3 flex  items-center space-x-4   ">
-        <p className="text-3xl font-semibold">{value}</p>
-        <span
-          className={` ${trend === "up" ? "bg-green-100 text-green-700 " : "bg-red-100 text-red-700"} flex items-center gap-2 rounded-lg px-2`}
-        >
-          {trend === "up" ? <FiTrendingUp /> : <FiTrendingDown />}
-          {percentage}
-        </span>
+      <div className="flex">
+        <p>{value}</p>
+        <span>{percentage > 0 ? <FiTrendingUp /> : <FiTrendingDown />} </span>
       </div>
-      <p className="mt-5 font-semibold text-gray-500">{title}</p>
+      <p>{title}</p>
     </div>
   );
 };

@@ -16,13 +16,13 @@ const ActivityGraph = () => {
     {
       name: "Page A",
       uv: 4000,
-      pv: 2400,
+      pv: 700,
       amt: 2400,
     },
     {
       name: "Page B",
-      uv: 3000,
-      pv: 1398,
+      uv: 4000,
+      pv: 9000,
       amt: 2210,
     },
     {
@@ -58,13 +58,6 @@ const ActivityGraph = () => {
   ];
 
   return (
-<<<<<<< Updated upstream
-    <div className="col-span-8 border border-stone-300 overflow-hidden rounded ">
-      <div className="p-4">
-        <h3 className="flex items-center gap-1.5 font-medium">
-          <FiUser /> activity
-        </h3>
-=======
     <div className="px-2 ">
       <div className="flex justify-between items-center my-2 mx-9">
         <div>
@@ -78,7 +71,6 @@ const ActivityGraph = () => {
           Last 7 month
           <FiCalendar />
         </button>
->>>>>>> Stashed changes
       </div>
       {/*  // TODO: our graph  */}
       <LineChart
@@ -91,25 +83,17 @@ const ActivityGraph = () => {
         responsive
         data={data}
       >
-<<<<<<< Updated upstream
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
-        <YAxis width="auto" />
-        <Tooltip />
-        <Legend />
-=======
         <CartesianGrid />
         <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
         <YAxis width="auto" />
         <Tooltip />
->>>>>>> Stashed changes
         <Line
           type="monotone"
           dataKey="pv"
-          stroke="#8884d8"
+          stroke="#F5C754"
           activeDot={{ r: 8 }}
         />
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="uv" stroke="#29A071" />
       </LineChart>
     </div>
   );

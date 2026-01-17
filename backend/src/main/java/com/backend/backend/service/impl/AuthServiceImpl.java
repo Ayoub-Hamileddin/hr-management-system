@@ -1,7 +1,7 @@
 package com.backend.backend.service.impl;
 
 import com.backend.backend.Exceptions.BadRequestException;
-import com.backend.backend.Exceptions.EmailAlreadyExsitException;
+import com.backend.backend.Exceptions.EmailAlreadyExistException;
 import com.backend.backend.Exceptions.NotFoundException;
 import com.backend.backend.Exceptions.UnauthorizedException;
 import com.backend.backend.config.JwtService;
@@ -95,7 +95,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse register(RegisterRequest registerRequest) {
 
            if (userRepository.existsByEmail(registerRequest.getEmail())) {
-               throw new EmailAlreadyExsitException("Email already exist");
+               throw new EmailAlreadyExistException("Email already exist");
             }
         
        var user=User.builder()
