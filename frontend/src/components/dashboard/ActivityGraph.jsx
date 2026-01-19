@@ -16,13 +16,13 @@ const ActivityGraph = () => {
     {
       name: "Page A",
       uv: 4000,
-      pv: 2400,
+      pv: 700,
       amt: 2400,
     },
     {
       name: "Page B",
-      uv: 3000,
-      pv: 1398,
+      uv: 4000,
+      pv: 9000,
       amt: 2210,
     },
     {
@@ -90,10 +90,10 @@ const ActivityGraph = () => {
         <Line
           type="monotone"
           dataKey="pv"
-          stroke="#8884d8"
+          stroke="#F5C754"
           activeDot={{ r: 8 }}
         />
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="uv" stroke="#29A071" />
       </LineChart>
     </div>
   );

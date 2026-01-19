@@ -1,10 +1,16 @@
 import React from "react";
-import StartCard from "./StartCard";
+import StatCard from "./StatCard";
+import { FiUsers } from "react-icons/fi";
+import { IoBriefcaseSharp } from "react-icons/io5";
+import { FaMinus, FaPlus } from "react-icons/fa";
 import ActivityGraph from "./ActivityGraph";
+<<<<<<< HEAD
 import UsageRadar from "./UsageRadar";
 import { FiUsers } from "react-icons/fi";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { IoBriefcaseSharp } from "react-icons/io";
+=======
+>>>>>>> 55a80668a1c5541dfaa1d0449991c56d41a51ea3
 
 const Grid = () => {
   return (
@@ -16,41 +22,43 @@ const Grid = () => {
         </p>
       </header>
 
-      <div className="grid grid-cols-12  mt-6     ">
-        <div className="col-span-5 grid grid-cols-2 gap-0.5 bg-gray-100  ">
+      <div className="grid grid-cols-12 ">
+        <div className="col-span-5 grid grid-cols-2 gap-0.5">
           <StatCard
             title="Total Employees"
-            value={"3,540"}
-            percentage={"25.5 %"}
-            trend="up"
+            value="3,540"
+            percentage={25.5}
             Icon={FiUsers}
           />
           <StatCard
             title="Job Applicants"
-            value={"1,150"}
-            percentage={"4.1 %"}
-            trend="up"
+            value="1,150"
+            percentage={4.1}
             Icon={IoBriefcaseSharp}
           />
           <StatCard
             title="New Employees"
-            value={"500"}
-            percentage={"5.1 %"}
-            trend="up"
+            value="500"
+            percentage={5.1}
             Icon={FaPlus}
           />
           <StatCard
             title="Resigned Employees"
+
             value={"93"}
             percentage={"-25.5 %"}
             trend="down"
             Icon={FaMinus}
           />
         </div>
-        <div className="col-span-7 bg-white  ">
+        <div className="col-span-7 bg-white">
           <ActivityGraph />
         </div>
+<<<<<<< HEAD
       </div>
+=======
+      </div>;
+>>>>>>> 55a80668a1c5541dfaa1d0449991c56d41a51ea3
     </div>
   );
 };

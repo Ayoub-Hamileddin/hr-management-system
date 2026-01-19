@@ -1,21 +1,19 @@
 package com.backend.backend.config;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
-import javax.crypto.SecretKey;
-
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 
 
@@ -33,7 +31,10 @@ public class JwtService {
     private Long refresh_token_expiration;
 
 
-
+    @PostConstruct
+    public void checkSecret() {
+        System.out.println("JWT SECRET = " + secret_key);
+    }
 
     public Claims extractAllClaims(String jwt){
         return Jwts
@@ -90,7 +91,7 @@ public class JwtService {
     
 
     private SecretKey getSignKey(){
-        byte[]  keyBytes=Decoders.BASE64.decode(secret_key);
+        byte[]  keyBytes=secret_key.getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
