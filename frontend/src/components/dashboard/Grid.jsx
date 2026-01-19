@@ -2,15 +2,12 @@ import React from "react";
 import StartCard from "./StartCard";
 import ActivityGraph from "./ActivityGraph";
 import UsageRadar from "./UsageRadar";
+import { FiUsers } from "react-icons/fi";
+import { FaMinus, FaPlus } from "react-icons/fa";
+import { IoBriefcaseSharp } from "react-icons/io";
 
 const Grid = () => {
   return (
-<<<<<<< Updated upstream
-    <div className="px-4 grid gap-3 grid-cols-12 ">
-      <StartCard />
-      <ActivityGraph />
-      <UsageRadar />
-=======
     <div className="p-8 bg-slate-50 h-[100%]">
       <header className="">
         <h1 className="text-3xl font-semibold">Hi, Pristia</h1>
@@ -54,7 +51,6 @@ const Grid = () => {
           <ActivityGraph />
         </div>
       </div>
->>>>>>> Stashed changes
     </div>
   );
 };

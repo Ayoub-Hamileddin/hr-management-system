@@ -58,13 +58,6 @@ const ActivityGraph = () => {
   ];
 
   return (
-<<<<<<< Updated upstream
-    <div className="col-span-8 border border-stone-300 overflow-hidden rounded ">
-      <div className="p-4">
-        <h3 className="flex items-center gap-1.5 font-medium">
-          <FiUser /> activity
-        </h3>
-=======
     <div className="px-2 ">
       <div className="flex justify-between items-center my-2 mx-9">
         <div>
@@ -78,7 +71,6 @@ const ActivityGraph = () => {
           Last 7 month
           <FiCalendar />
         </button>
->>>>>>> Stashed changes
       </div>
       {/*  // TODO: our graph  */}
       <LineChart
@@ -91,18 +83,10 @@ const ActivityGraph = () => {
         responsive
         data={data}
       >
-<<<<<<< Updated upstream
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
-        <YAxis width="auto" />
-        <Tooltip />
-        <Legend />
-=======
         <CartesianGrid />
         <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
         <YAxis width="auto" />
         <Tooltip />
->>>>>>> Stashed changes
         <Line
           type="monotone"
           dataKey="pv"
