@@ -4,6 +4,13 @@ import { FiUsers } from "react-icons/fi";
 import { IoBriefcaseSharp } from "react-icons/io5";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import ActivityGraph from "./ActivityGraph";
+<<<<<<< HEAD
+import UsageRadar from "./UsageRadar";
+import { FiUsers } from "react-icons/fi";
+import { FaMinus, FaPlus } from "react-icons/fa";
+import { IoBriefcaseSharp } from "react-icons/io";
+=======
+>>>>>>> 55a80668a1c5541dfaa1d0449991c56d41a51ea3
 
 const Grid = () => {
   return (
@@ -47,7 +54,11 @@ const Grid = () => {
         <div className="col-span-7 bg-white">
           <ActivityGraph />
         </div>
+<<<<<<< HEAD
+      </div>
+=======
       </div>;
+>>>>>>> 55a80668a1c5541dfaa1d0449991c56d41a51ea3
     </div>
   );
 };
