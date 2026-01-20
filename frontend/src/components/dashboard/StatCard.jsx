@@ -1,9 +1,9 @@
 import React from "react";
 import { FiTrendingDown, FiTrendingUp } from "react-icons/fi";
 
-const StatCard = ({ value, title, Icon, percentage, trend }) => {
+const StatCard = ({ id, value, title, Icon, percentage, trend }) => {
   return (
-    <div className=" bg-white p-8">
+    <div key={id} className=" bg-white p-8">
       <div className="bg-stone-100 size-[50px] flex items-center justify-center rounded-full ">
         <Icon className={"size-5 hover:text-[#0cad5d] cursor-pointer"} />
       </div>
