@@ -4,47 +4,37 @@ import { FiUsers } from "react-icons/fi";
 import { IoBriefcaseSharp } from "react-icons/io5";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import ActivityGraph from "./ActivityGraph";
-<<<<<<< HEAD
-import UsageRadar from "./UsageRadar";
-import { FiUsers } from "react-icons/fi";
-import { FaMinus, FaPlus } from "react-icons/fa";
-import { IoBriefcaseSharp } from "react-icons/io";
-=======
->>>>>>> 55a80668a1c5541dfaa1d0449991c56d41a51ea3
+import TopBar from "./TopBar";
 
 const Grid = () => {
   return (
     <div className="p-8 bg-slate-50 h-[100%]">
-      <header className="">
-        <h1 className="text-3xl font-semibold">Hi, Pristia</h1>
-        <p className="mt-2 text-stone-500 font-light">
-          this is your HR dashboard report
-        </p>
-      </header>
-
-      <div className="grid grid-cols-12 ">
+      <TopBar />
+      <div className="grid grid-cols-12  mt-5">
         <div className="col-span-5 grid grid-cols-2 gap-0.5">
           <StatCard
             title="Total Employees"
             value="3,540"
-            percentage={25.5}
+            percentage={"+25.5%"}
+            trend="up"
             Icon={FiUsers}
           />
           <StatCard
             title="Job Applicants"
             value="1,150"
-            percentage={4.1}
+            percentage={"-4.1%"}
+            trend="up"
             Icon={IoBriefcaseSharp}
           />
           <StatCard
             title="New Employees"
             value="500"
-            percentage={5.1}
+            percentage={"+5.1%"}
+            trend="up"
             Icon={FaPlus}
           />
           <StatCard
             title="Resigned Employees"
-
             value={"93"}
             percentage={"-25.5 %"}
             trend="down"
@@ -54,11 +44,7 @@ const Grid = () => {
         <div className="col-span-7 bg-white">
           <ActivityGraph />
         </div>
-<<<<<<< HEAD
       </div>
-=======
-      </div>;
->>>>>>> 55a80668a1c5541dfaa1d0449991c56d41a51ea3
     </div>
   );
 };
