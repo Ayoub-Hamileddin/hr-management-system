@@ -84,7 +84,7 @@ const ActivityGraph = () => {
         data={data}
       >
         <CartesianGrid />
-        <XAxis dataKey="name" padding={{ left: 30, right: 30 }} />
+        <XAxis dataKey="name"  padding={{ left: 30, right: 30 }} />
         <YAxis width="auto" />
         <Tooltip />
         <Line
