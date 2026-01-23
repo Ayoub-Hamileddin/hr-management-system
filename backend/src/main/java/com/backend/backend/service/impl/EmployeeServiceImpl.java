@@ -56,8 +56,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
     public EmployeeDto createEmployee(CreateEmployeeDto createEmployeeDto) {
+
 
         User user=userService.createEmployeeUser(createEmployeeDto);
 
@@ -65,18 +65,22 @@ public class EmployeeServiceImpl implements EmployeeService {
                 ()->new NotFoundException("departement","Departemnt Not found")
         );
 
+
         Employee employee=Employee.builder()
 
                 .phone(createEmployeeDto.getPhone())
                 .department(department)
                 .position(Position.INTERN)
                 .salary(5000)
+                .status(EmployeeStatus.INVITED)
                 .user(user)
                 .hireDate(LocalDateTime.now())
 
                 .build();
 
-        invitationService.sendInvitation(user);
+          employeeRepository.save(employee);
+
+          invitationService.sendInvitation(user);
 
         return employeeMapper.toDto(employee);
     }
@@ -106,7 +110,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     {
         //the Soft delete
 
-
         Employee employee=employeeRepository.findById(employeeId).orElseThrow(
                 ()-> new NotFoundException("employee","Employee Not found")
         ) ;
@@ -127,12 +130,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
 
-    @Override
-    public List<EmployeeDto> SearchEmployeeByName(String name) {
-        List<Employee> employees=employeeRepository.findUserFirstNameByEmployeeName(name);
-        return employees
-                .stream()
-                .map(employee -> employeeMapper.toDto(employee))
-                .toList();
-    }
+//    @Override
+//    public String SearchEmployeeByName(String name) {
+////        List<Employee> employees=employeeRepository.findUserFirstNameByEmployeeName(name);
+////        return employees
+////                .stream()
+////                .map(employee -> employeeMapper.toDto(employee))
+////                .toList();
+//    }
 }
