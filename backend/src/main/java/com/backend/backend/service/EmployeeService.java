@@ -19,5 +19,5 @@ public interface EmployeeService {
 
         DeleteResponse deleteEmployee(Long employeeId);
 
-        List<EmployeeDto> SearchEmployeeByName(String name);
+//        List<EmployeeDto> SearchEmployeeByName(String name);
 }
