@@ -30,13 +30,11 @@ public class CreateEmployeeDto {
     @NotBlank(message = "phone cannot be empty")
     private String phone;
 
-    @NotBlank(message = "position cannot be empty")
     private Position position;
 
     private Double salary;
 
-    @NotBlank(message = "department id cannot be empty")
-    private Long  departmentId;
+    private Long departmentId;
 
 
 
