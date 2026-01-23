@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+import java.util.UUID;
 
 
 @Service
@@ -120,18 +120,21 @@ public class UserServiceImpl implements UserService {
             throw new EmailAlreadyExistException("Employee email already exist");
         }
 
-        return User.builder()
-
+        User user= User.builder()
                 .firstName(createEmployeeDto.getFirstName())
                 .lastName(createEmployeeDto.getLastName())
                 .email(createEmployeeDto.getEmail())
                 .role(Role.ROLE_EMPLOYEE)
-                .password(null)
+                .password(passwordEncoder.encode(UUID.randomUUID().toString()))
                 .isActive(false)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(null)
 
                 .build();
+
+        userRepository.save(user);
+
+        return user;
     }
 
     @Override
