@@ -10,3 +10,4 @@ export const store = configureStore({
   middleware: (getDefualtMiddleware) =>
     getDefualtMiddleware().concat(baseApi.middleware),
 });
+  

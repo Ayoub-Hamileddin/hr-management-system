@@ -9,7 +9,9 @@ const FilterSection = ({ id, label, options }) => {
         key={id}
         defaultValue={""}
       >
-        <option value="">{label}</option>
+        <option value="" disabled>
+          {label}
+        </option>
         {options.map((option, index) => (
           <option key={index} value={option}>
             {option}

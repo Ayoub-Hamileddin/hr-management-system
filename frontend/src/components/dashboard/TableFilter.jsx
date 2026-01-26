@@ -12,7 +12,7 @@ const TableFilter = () => {
           <input
             type="text"
             placeholder="Search For employees"
-            className="border  outline-none border-stone-300 px-5 py-2 rounded-lg  "
+            className="border  outline-none border-stone-300 px-5 py-2 rounded-lg  shadow-md  "
           />
           <div className="absolute inset-y-0 right-0 flex items-center p-3 ">
             <CiSearch size={22} />
