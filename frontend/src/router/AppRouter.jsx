@@ -7,6 +7,8 @@ import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Dashboard from "../pages/dashboard/Dashboard";
 import { Admin } from "./Admin";
+import AdminLayout from "../layout/AdminLayout";
+import Employees from "../pages/employees/Employees";
 
 const AppRouter = () => {
   return (
@@ -22,7 +24,10 @@ const AppRouter = () => {
 
         {/* Route Admin */}
         <Route element={<Admin />}></Route>
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="employees" element={<Employees />} />
+        </Route>
       </Routes>
     </Router>
   );

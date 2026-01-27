@@ -8,7 +8,7 @@ import { statsData } from "../../data/statsData";
 
 const Grid = () => {
   return (
-    <div className="p-8 bg-slate-50 h-[100%]">
+    <div>
       <TopBar />
 
       {/* section 1 */}
