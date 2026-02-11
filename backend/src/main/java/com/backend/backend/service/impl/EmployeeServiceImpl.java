@@ -78,7 +78,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
                 .build();
 
-          employeeRepository.save(employee);
+          Employee savedEmployee =employeeRepository.save(employee);
+
+          user.setEmployee(savedEmployee);
+
+        userRepository.save(user);
 
           invitationService.sendInvitation(user);
 

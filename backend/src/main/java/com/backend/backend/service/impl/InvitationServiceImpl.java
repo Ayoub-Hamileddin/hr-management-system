@@ -6,6 +6,7 @@ import com.backend.backend.repository.InvitationTokenRepository;
 import com.backend.backend.service.EmailService;
 import com.backend.backend.service.InvitationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Async
 public class InvitationServiceImpl implements InvitationService {
 
     private final InvitationTokenRepository tokenRepository;
