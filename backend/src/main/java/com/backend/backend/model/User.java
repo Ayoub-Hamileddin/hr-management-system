@@ -50,8 +50,7 @@ public class User implements UserDetails     {
 
     private LocalDateTime updatedAt;
 
-    @OneToOne
-    @JoinColumn(name = "employee_id")
+    @OneToOne(mappedBy = "user")
     private Employee employee;
 
     @PrePersist

@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService {
 
                 .build();
 
-        userRepository.save(user);
+
 
         return user;
     }
@@ -171,7 +171,8 @@ public class UserServiceImpl implements UserService {
         User user=invitationToken.getUser();
 
         // update User password  null -> new password  : after activation
-        user.setPassword(passwordRequest.getPassword());
+        user.setPassword(passwordEncoder.encode(passwordRequest.getPassword()));
+        user.setIsActive(true);
             //save the password
             userRepository.save(user);
 
