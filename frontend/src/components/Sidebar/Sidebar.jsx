@@ -9,8 +9,8 @@ import SidebarFooter from "./SidebarFooter";
 
 const Sidebar = () => {
   return (
-    <div className="">
-      <div className="overflow-y-scroll sticky top-4 h-[calc(100vh-100px-100px)]">
+    <div className="sticky  ">
+      <div className="overflow-y-scroll  top-4 h-[calc(100vh-100px-100px)]">
         {/* Header */}
         <div className="space-y-7 ">
           <SidebarHeader />
@@ -21,9 +21,8 @@ const Sidebar = () => {
         <div className="mt-[34px]">
           <SidebarItems />
         </div>
+        {/* footer */}
       </div>
-      {/* footer */}
-
       <SidebarFooter />
     </div>
   );

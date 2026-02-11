@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { MdDarkMode, MdOutlineLightMode } from "react-icons/md";
-
+// className="space-y-5 px-2 sticky  top-[calc(100vh-190px)]"
 const SidebarFooter = () => {
   const [dark, setDark] = useState(false);
   return (
-    <div className="space-y-5 px-2 sticky  top-[calc(100vh-190px)]">
+    <div className="space-y-5 px-2">
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
           <FaRegQuestionCircle size={20} className="text-gray-400" />

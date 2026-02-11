@@ -6,8 +6,8 @@ import EmployeeSection from "./EmployeeSection";
 
 const DashboardComponent = () => {
   return (
-    <div className="border-2  bg-white rounded-lg   pb-4 shadow-lg  h-[200vh]   ">
-      <Navbar />
+    <div>
+      {/* <Navbar /> */}
       <Grid />
     </div>
   );
