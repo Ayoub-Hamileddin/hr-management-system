@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3307/hr_management_system
-    username: root
-    password: hamileddin2006
+    url: jdbc:mysql://localhost:3306/hr_management_system
+    username: dev_ayoub
+    password: am10340
 
   jpa:
     hibernate:

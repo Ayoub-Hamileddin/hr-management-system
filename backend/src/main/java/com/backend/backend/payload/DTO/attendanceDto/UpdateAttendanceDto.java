@@ -1,0 +1,19 @@
+package com.backend.backend.payload.DTO.attendanceDto;
+
+import com.backend.backend.domain.AttendanceStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalTime;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class UpdateAttendanceDto {
+    private LocalTime checkIn;
+    private LocalTime checkOut;
+    private AttendanceStatus status;
+}
