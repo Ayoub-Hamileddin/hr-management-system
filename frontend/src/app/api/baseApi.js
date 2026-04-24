@@ -17,5 +17,6 @@ export const baseQuery = fetchBaseQuery({
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
+  tagTypes: ["Employee", "Department", "Applicant", "TimeOff", "Payroll", "Performance", "Attendance", "Dashboard"],
   endpoints: () => ({}),
 });

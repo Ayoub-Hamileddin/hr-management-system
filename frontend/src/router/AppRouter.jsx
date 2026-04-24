@@ -1,32 +1,34 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import ProtectedRoutes from "./ProtectedRoutes";
-import Profile from "../pages/auth/Profile";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
-import Dashboard from "../pages/dashboard/Dashboard";
-import { Admin } from "./Admin";
 import AdminLayout from "../layout/AdminLayout";
+import Grid from "../components/dashboard/Grid";
 import Employees from "../pages/employees/Employees";
+import TimeOff from "../pages/timeoff/TimeOff";
+import Attendance from "../pages/attendance/Attendance";
+import Payroll from "../pages/payroll/Payroll";
+import Performance from "../pages/performance/Performance";
+import Recruitment from "../pages/recruitment/Recruitment";
+import Settings from "../pages/settings/Settings";
 
 const AppRouter = () => {
   return (
     <Router>
       <Routes>
-        {/* public routes */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
-        <Route element={<ProtectedRoutes />}>
-          <Route path="/profile" element={<Profile />} />
-        </Route>
-
-        {/* Route Admin */}
-        <Route element={<Admin />}></Route>
+        
         <Route path="/dashboard" element={<AdminLayout />}>
-          <Route index element={<Dashboard />} />
+          <Route index element={<Grid />} />
           <Route path="employees" element={<Employees />} />
+          <Route path="timeoff" element={<TimeOff />} />
+          <Route path="attendance" element={<Attendance />} />
+          <Route path="payroll" element={<Payroll />} />
+          <Route path="performance" element={<Performance />} />
+          <Route path="recruitment" element={<Recruitment />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
     </Router>

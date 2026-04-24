@@ -1,7 +1,5 @@
 import React from "react";
 import AccountToggle from "./AccountToggle";
-import RouteSelect from "./SidebarItems";
-import Plan from "./SidebarFooter";
 import SidebarHeader from "./SidebarHeader";
 import SidebarSection from "./SidebarSection";
 import SidebarItems from "./SidebarItems";
@@ -9,21 +7,21 @@ import SidebarFooter from "./SidebarFooter";
 
 const Sidebar = () => {
   return (
-    <div className="sticky  ">
-      <div className="overflow-y-scroll  top-4 h-[calc(100vh-100px-100px)]">
-        {/* Header */}
-        <div className="space-y-7 ">
-          <SidebarHeader />
-          <SidebarSection />
-        </div>
-
-        {/* links items */}
-        <div className="mt-[34px]">
-          <SidebarItems />
-        </div>
-        {/* footer */}
+    <div className="flex flex-col h-full py-5">
+      {/* Logo */}
+      <div className="px-5 mb-6">
+        <SidebarHeader />
       </div>
-      <SidebarFooter />
+
+      {/* Navigation */}
+      <div className="flex-1 overflow-y-auto">
+        <SidebarItems />
+      </div>
+
+      {/* Footer */}
+      <div className="px-3 pt-4 border-t border-gray-100">
+        <SidebarFooter />
+      </div>
     </div>
   );
 };

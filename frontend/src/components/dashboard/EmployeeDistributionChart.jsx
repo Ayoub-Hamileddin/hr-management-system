@@ -1,64 +1,63 @@
 import React from "react";
-import { CiCircleChevDown } from "react-icons/ci";
-import { Label, Pie, PieChart, Sector } from "recharts";
-import MetricsOverview from "./MetricsOverview";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
-const EmployeeDistributionChart = ({ isAnimationActive = true }) => {
-  const data = [
-    { name: "Group A", value: 400, fill: "#0088FE" },
-    { name: "Group B", value: 300, fill: "#00C49F" },
-    { name: "Group C", value: 300, fill: "#FFBB28" },
-    { name: "Group D", value: 200, fill: "#FF8042" },
-  ];
+const data = [
+  { name: "Engineering", value: 35, color: "#0cad5d" },
+  { name: "Design", value: 20, color: "#F5C754" },
+  { name: "Marketing", value: 15, color: "#6366f1" },
+  { name: "HR", value: 12, color: "#f97316" },
+  { name: "Finance", value: 10, color: "#ec4899" },
+  { name: "Others", value: 8, color: "#94a3b8" },
+];
 
-  return (
-    <div className="col-span-4 w-full p-8 bg-white rounded-lg">
-      <div className="flex items-center justify-between ">
-        <h1 className="text-xl font-semibold">Total Employees</h1>
-        <span className="text-gray-600 font-semibold flex items-center gap-1">
-          All Times <CiCircleChevDown className="size-4 cursor-pointer" />{" "}
-        </span>
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white border border-gray-100 rounded-xl shadow-card-lg p-3 text-xs">
+        <p className="font-bold" style={{ color: payload[0].payload.color }}>
+          {payload[0].name}
+        </p>
+        <p className="text-gray-600 mt-1">{payload[0].value}% of workforce</p>
       </div>
-      <div className="flex justify-center mt-5">
-        <PieChart
-          style={{
-            width: "100%",
-            maxWidth: "250px",
-            maxHeight: "80vh",
-            aspectRatio: 1,
-          }}
-          responsive
-        >
+    );
+  }
+  return null;
+};
+
+const EmployeeDistributionChart = () => {
+  return (
+    <div className="card h-full">
+      <h3 className="text-lg font-bold text-gray-900 mb-1">Employee Distribution</h3>
+      <p className="text-sm text-gray-400 mb-4">By department</p>
+
+      <ResponsiveContainer width="100%" height={200}>
+        <PieChart>
           <Pie
             data={data}
-            innerRadius="80%"
-            outerRadius="100%"
-            // Corner radius is the rounded edge of each pie slice
-            cornerRadius="50%"
-            fill="#8884d8"
-            // padding angle is the gap between each pie slice
-            paddingAngle={4}
+            cx="50%"
+            cy="50%"
+            innerRadius={55}
+            outerRadius={85}
+            paddingAngle={3}
             dataKey="value"
-            isAnimationActive={isAnimationActive}
-          />
-
-          <Label position={"center"} className="bg-white shadow-lg size-9">
-            121
-          </Label>
+          >
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+            ))}
+          </Pie>
+          <Tooltip content={<CustomTooltip />} />
         </PieChart>
-      </div>
-      <div>
-        <MetricsOverview color={"bg-green-600"} label={"Others"} value={71} />
-        <MetricsOverview
-          color={"bg-yellow-400"}
-          label={"Onboarding"}
-          value={27}
-        />
-        <MetricsOverview
-          color={"bg-blue-600"}
-          label={"Ofboarding"}
-          value={23}
-        />
+      </ResponsiveContainer>
+
+      {/* Legend */}
+      <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-2">
+        {data.map((item) => (
+          <div key={item.name} className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: item.color }} />
+            <span className="text-xs text-gray-600 truncate">{item.name}</span>
+            <span className="text-xs font-semibold text-gray-900 ml-auto">{item.value}%</span>
+          </div>
+        ))}
       </div>
     </div>
   );

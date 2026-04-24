@@ -1,16 +1,14 @@
 import React from "react";
-import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 
 const SidebarHeader = () => {
   return (
-    <div>
-      <div className="flex items-center justify-between">
-        <div className="flex gap-2  items-center ">
-          <span className="font-bold text-3xl text-[#0cad5d]">H</span>
-          <p className="text-lg font-semibold">HRDashboard</p>
-        </div>
-
-        <MdKeyboardDoubleArrowLeft className="text-2xl text-stone-300  hover:text-stone-700 cursor-pointer " />
+    <div className="flex items-center gap-2.5">
+      <div className="w-9 h-9 bg-brand rounded-xl flex items-center justify-center shrink-0 shadow-sm">
+        <span className="text-white font-extrabold text-lg leading-none">H</span>
+      </div>
+      <div>
+        <p className="text-base font-extrabold text-gray-900 leading-tight">HRDashboard</p>
+        <p className="text-xs text-gray-400">HR Management</p>
       </div>
     </div>
   );

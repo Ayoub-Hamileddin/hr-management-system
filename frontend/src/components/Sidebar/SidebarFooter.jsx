@@ -2,42 +2,60 @@ import React, { useState } from "react";
 import { FaRegQuestionCircle } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { MdDarkMode, MdOutlineLightMode } from "react-icons/md";
-// className="space-y-5 px-2 sticky  top-[calc(100vh-190px)]"
+import { FiLogOut } from "react-icons/fi";
+import { useDispatch } from "react-redux";
+import { logout } from "../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
 const SidebarFooter = () => {
   const [dark, setDark] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    toast.success("Logged out successfully");
+    navigate("/login");
+  };
+
   return (
-    <div className="space-y-5 px-2">
-      <div className="flex justify-between items-center">
-        <div className="flex gap-2 items-center">
-          <FaRegQuestionCircle size={20} className="text-gray-400" />
-          <p className="font-sans font-semibold text-sm">Help Center</p>
-        </div>
-        <button className=" size-6 text-sm bg-red-500 rounded-full text-white">
-          8
-        </button>
-      </div>
-      <div className="flex items-center gap-2">
-        <IoMdSettings size={20} className="text-gray-400" />
-        <p className="font-sans font-semibold text-sm">Setting</p>
-      </div>
-      <div className="mt-[40px]  flex justify-around items-center  space-x-2 px-3 py-2 rounded-3xl bg-stone-100  ">
+    <div className="space-y-1">
+      <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+        <FaRegQuestionCircle size={18} />
+        Help Center
+      </button>
+      <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors">
+        <IoMdSettings size={18} />
+        Settings
+      </button>
+      <button
+        onClick={handleLogout}
+        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors"
+      >
+        <FiLogOut size={18} />
+        Logout
+      </button>
+
+      {/* Dark mode toggle */}
+      <div className="mt-3 flex items-center gap-1 p-1 rounded-2xl bg-gray-100">
         <button
-          onClick={() => setDark(!dark)}
-          className={`flex items-center space-x-1  w-[100%] px-4 py-1.5  rounded-3xl transition-colors duration-300 ${
-            !dark ? "bg-white text-black shadow-lg" : "text-stone-300 "
-          } `}
+          onClick={() => setDark(false)}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
+            !dark ? "bg-white text-gray-900 shadow-sm" : "text-gray-400"
+          }`}
         >
-          <MdOutlineLightMode size={18} />
-          <span className="text-sm font-semibold"> Light</span>
+          <MdOutlineLightMode size={15} />
+          Light
         </button>
         <button
-          onClick={() => setDark(!dark)}
-          className={`flex items-center space-x-1  w-[100%] px-4 py-1.5  rounded-3xl transition-colors duration-300  ${
-            dark ? "bg-white text-black shadow-lg " : "text-stone-300 "
-          }  `}
+          onClick={() => setDark(true)}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 ${
+            dark ? "bg-white text-gray-900 shadow-sm" : "text-gray-400"
+          }`}
         >
-          <MdDarkMode size={18} />
-          <span className="text-sm font-semibold"> Dark</span>
+          <MdDarkMode size={15} />
+          Dark
         </button>
       </div>
     </div>

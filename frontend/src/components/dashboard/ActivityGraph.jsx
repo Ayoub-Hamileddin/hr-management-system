@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  ResponsiveContainer,
   CartesianGrid,
   Legend,
   Line,
@@ -8,93 +9,98 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import TeamGraph from "./TeamGraph";
 import { FiCalendar } from "react-icons/fi";
 
-const ActivityGraph = () => {
-  const data = [
-    {
-      name: "Page A",
-      uv: 4000,
-      pv: 700,
-      amt: 2400,
-    },
-    {
-      name: "Page B",
-      uv: 4000,
-      pv: 9000,
-      amt: 2210,
-    },
-    {
-      name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
+const data = [
+  { month: "Jan", productTeam: 65, projectTeam: 45 },
+  { month: "Feb", productTeam: 72, projectTeam: 60 },
+  { month: "Mar", productTeam: 68, projectTeam: 75 },
+  { month: "Apr", productTeam: 80, projectTeam: 70 },
+  { month: "May", productTeam: 75, projectTeam: 85 },
+  { month: "Jun", productTeam: 90, projectTeam: 80 },
+  { month: "Jul", productTeam: 85, projectTeam: 92 },
+];
 
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white border border-gray-100 rounded-xl shadow-card-lg p-3 text-xs">
+        <p className="font-bold text-gray-700 mb-2">{label}</p>
+        {payload.map((p) => (
+          <div key={p.dataKey} className="flex items-center gap-2 mb-1">
+            <span className="w-2 h-2 rounded-full" style={{ background: p.color }} />
+            <span className="text-gray-600">{p.name}:</span>
+            <span className="font-semibold">{p.value}%</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
+const ActivityGraph = () => {
   return (
-    <div className="px-2 ">
-      <div className="flex justify-between items-center my-2 mx-9">
+    <div className="card h-full">
+      {/* Header */}
+      <div className="flex justify-between items-start mb-6">
         <div>
-          <h3 className="font-semibold text-2xl mb-4">Team Performance</h3>
-          <div className="flex items-center space-x-3 mb-4">
-            <TeamGraph name={"Product Team"} color={"bg-[#F5C754]"} />
-            <TeamGraph name={"Project Team"} color={"bg-[#29A071]"} />
+          <h3 className="text-lg font-bold text-gray-900">Team Performance</h3>
+          <p className="text-sm text-gray-400 mt-0.5">Monthly performance score (%)</p>
+          <div className="flex items-center gap-4 mt-3">
+            <span className="flex items-center gap-1.5 text-xs font-semibold text-gray-600">
+              <span className="w-3 h-3 rounded-full bg-accent" />
+              Product Team
+            </span>
+            <span className="flex items-center gap-1.5 text-xs font-semibold text-gray-600">
+              <span className="w-3 h-3 rounded-full bg-brand" />
+              Project Team
+            </span>
           </div>
         </div>
-        <button className="flex  items-center gap-1 p-2.5 font-medium  border border-gray-300 rounded-lg shadow-md">
-          Last 7 month
-          <FiCalendar />
+        <button className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-gray-600">
+          <FiCalendar size={14} />
+          Last 7 months
         </button>
       </div>
-      {/*  // TODO: our graph  */}
-      <LineChart
-        style={{
-          width: "100%",
-          maxWidth: "100%",
-          maxHeight: "40vh",
-          aspectRatio: 1.618,
-        }}
-        responsive
-        data={data}
-      >
-        <CartesianGrid />
-        <XAxis dataKey="name"  padding={{ left: 30, right: 30 }} />
-        <YAxis width="auto" />
-        <Tooltip />
-        <Line
-          type="monotone"
-          dataKey="pv"
-          stroke="#F5C754"
-          activeDot={{ r: 8 }}
-        />
-        <Line type="monotone" dataKey="uv" stroke="#29A071" />
-      </LineChart>
+
+      {/* Chart */}
+      <ResponsiveContainer width="100%" height={200}>
+        <LineChart data={data} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
+          <XAxis
+            dataKey="month"
+            tick={{ fontSize: 11, fill: "#9ca3af" }}
+            axisLine={false}
+            tickLine={false}
+          />
+          <YAxis
+            tick={{ fontSize: 11, fill: "#9ca3af" }}
+            axisLine={false}
+            tickLine={false}
+            domain={[0, 100]}
+          />
+          <Tooltip content={<CustomTooltip />} />
+          <Line
+            type="monotone"
+            dataKey="productTeam"
+            name="Product Team"
+            stroke="#F5C754"
+            strokeWidth={2.5}
+            dot={{ r: 4, fill: "#F5C754", strokeWidth: 0 }}
+            activeDot={{ r: 6, fill: "#F5C754" }}
+          />
+          <Line
+            type="monotone"
+            dataKey="projectTeam"
+            name="Project Team"
+            stroke="#0cad5d"
+            strokeWidth={2.5}
+            dot={{ r: 4, fill: "#0cad5d", strokeWidth: 0 }}
+            activeDot={{ r: 6, fill: "#0cad5d" }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 };

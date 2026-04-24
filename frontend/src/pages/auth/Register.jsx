@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../../features/auth/authApi";
-import { registerSchema } from "../../utils/RegisterSchema";
+import { registerSchema } from "../../utils/registerSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { handleServerErrors } from "../../helper/handleServerErrors";
+import { FiUser, FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+
 const Register = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -27,192 +32,230 @@ const Register = () => {
         email: data.email,
         password: data.password,
       }).unwrap();
-      toast.success("register successfuly");
+      toast.success("Account created successfully!");
       navigate("/login");
     } catch (error) {
-      console.log(error?.data);
-
       handleServerErrors(error, setError, toast);
     }
   };
 
   return (
-    <div>
-      <section className="bg-white bg-[url('src/assets/images/background-2.webp')] bg-cover bg-center h-screen">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-extrabold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Create an account
-              </h1>
-              <form
-                className="space-y-4 md:space-y-6"
-                onSubmit={handleSubmit(onSubmit)}
+    <div className="min-h-screen flex font-sans">
+      {/* Left Panel — Decorative */}
+      <div className="hidden lg:flex flex-1 bg-gradient-to-br from-brand-600 via-brand to-brand-400 flex-col justify-center items-center p-12 relative overflow-hidden">
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-white/10 rounded-full" />
+        <div className="absolute -bottom-32 -right-16 w-80 h-80 bg-white/10 rounded-full" />
+
+        <div className="relative z-10 text-center max-w-sm">
+          <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
+            <span className="text-4xl font-extrabold text-white">H</span>
+          </div>
+          <h2 className="text-3xl font-extrabold text-white mb-4 leading-tight">
+            Join HRDashboard today
+          </h2>
+          <p className="text-white/80 text-sm leading-relaxed">
+            Start managing your HR operations efficiently. Set up your organization in minutes.
+          </p>
+          <div className="mt-8 flex flex-col gap-3">
+            {[
+              "✅ Employee management & tracking",
+              "✅ Payroll & attendance automation",
+              "✅ Performance reviews & analytics",
+            ].map((f) => (
+              <div
+                key={f}
+                className="bg-white/20 backdrop-blur-sm rounded-xl px-4 py-2.5 text-sm text-white text-left"
               >
-                <div>
-                  <label
-                    htmlFor="firstName"
-                    className="block mb-2 text-sm font-medium  text-gray-900 dark:text-white"
-                  >
-                    firstName
-                  </label>
+                {f}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Right Panel — Form */}
+      <div className="flex-1 flex flex-col justify-center items-center px-8 py-12 bg-white overflow-y-auto">
+        <div className="w-full max-w-md">
+          {/* Logo */}
+          <div className="flex items-center gap-2 mb-8">
+            <div className="w-9 h-9 bg-brand rounded-lg flex items-center justify-center">
+              <span className="text-white font-extrabold text-lg">H</span>
+            </div>
+            <span className="text-xl font-bold text-gray-900">HRDashboard</span>
+          </div>
+
+          <h1 className="text-3xl font-extrabold text-gray-900 mb-2">
+            Create your account
+          </h1>
+          <p className="text-gray-500 text-sm mb-8">
+            Fill in the form below to get started.
+          </p>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Name row */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  First name
+                </label>
+                <div className="relative">
+                  <FiUser size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
                     {...register("firstName")}
                     type="text"
-                    name="firstName"
                     id="firstName"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="John"
-                    required=""
+                    className="input-field pl-10"
                   />
-                  {errors.firstName && (
-                    <p className="text-red-600 font-medium text-xs ">
-                      {errors.firstName.message}
-                    </p>
-                  )}
                 </div>
-                <div>
-                  <label
-                    htmlFor="lastName"
-                    className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
-                  >
-                    lastName
-                  </label>
+                {errors.firstName && (
+                  <p className="text-red-500 text-xs mt-1">{errors.firstName.message}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Last name
+                </label>
+                <div className="relative">
+                  <FiUser size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                   <input
                     {...register("lastName")}
                     type="text"
-                    name="lastName"
                     id="lastName"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Doe"
-                    required=""
+                    className="input-field pl-10"
                   />
-                  {errors.lastName && (
-                    <p className="text-red-600 font-medium text-xs">
-                      {errors.lastName.message}
-                    </p>
-                  )}
                 </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
-                  >
-                    email
-                  </label>
-                  <input
-                    {...register("email")}
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder="name@company.com"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
-                  />
-                  {errors.email && (
-                    <p className="text-red-600 font-medium text-xs">
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
-                  >
-                    password
-                  </label>
-                  <input
-                    {...register("password")}
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
-                  />
-                  {errors.password && (
-                    <p className="text-red-600 font-medium text-xs">
-                      {errors.password.message}
-                    </p>
-                  )}
-                </div>
-                <div>
-                  <label
-                    htmlFor="confirmPassword"
-                    className="block mb-2 text-sm  font-medium text-gray-900 dark:text-white"
-                  >
-                    confirm password
-                  </label>
-                  <input
-                    {...register("confirmPassword")}
-                    type="password"
-                    name="confirmPassword"
-                    id="confirmPassword"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
-                  />
-                  {errors.confirmPassword && (
-                    <p className="text-red-600 font-medium text-xs">
-                      {errors.confirmPassword.message}
-                    </p>
-                  )}
-                </div>
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      {...register("acceptTerms")}
-                      id="terms"
-                      aria-describedby="terms"
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      required=""
-                    />
-                  </div>
-
-                  <div className="ml-3 text-sm">
-                    <label
-                      htmlFor="terms"
-                      className="font-light text-gray-500 dark:text-gray-300"
-                    >
-                      I accept the{" "}
-                      <Link
-                        className=" font-bold text-primary-600 hover:underline dark:text-primary-500"
-                        to="#"
-                      >
-                        Terms and Conditions
-                      </Link>
-                    </label>
-                  </div>
-                </div>
-                {errors.acceptTerms && (
-                  <p className="text-red-600 font-medium text-xs">
-                    {errors.acceptTerms.message}
-                  </p>
+                {errors.lastName && (
+                  <p className="text-red-500 text-xs mt-1">{errors.lastName.message}</p>
                 )}
-                <button
-                  type="submit"
-                  disabled={isLoading || isSubmitting}
-                  className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300  font-bold rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  {isLoading ? "Registering..." : "Create an account"}
-                </button>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Already have an account?{" "}
-                  <Link
-                    to="/login"
-                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                  >
-                    Login here
-                  </Link>
-                </p>
-              </form>
+              </div>
             </div>
-          </div>
+
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Email address
+              </label>
+              <div className="relative">
+                <FiMail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  {...register("email")}
+                  type="email"
+                  id="email"
+                  placeholder="name@company.com"
+                  className="input-field pl-10"
+                />
+              </div>
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+              )}
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Password
+              </label>
+              <div className="relative">
+                <FiLock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  {...register("password")}
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  placeholder="••••••••"
+                  className="input-field pl-10 pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+              )}
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Confirm password
+              </label>
+              <div className="relative">
+                <FiLock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  {...register("confirmPassword")}
+                  type={showConfirm ? "text" : "password"}
+                  id="confirmPassword"
+                  placeholder="••••••••"
+                  className="input-field pl-10 pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm(!showConfirm)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {showConfirm ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                </button>
+              </div>
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-xs mt-1">{errors.confirmPassword.message}</p>
+              )}
+            </div>
+
+            {/* Terms */}
+            <div className="flex items-start gap-2">
+              <input
+                {...register("acceptTerms")}
+                id="terms"
+                type="checkbox"
+                className="w-4 h-4 mt-0.5 rounded border-gray-300 text-brand focus:ring-brand"
+              />
+              <label htmlFor="terms" className="text-sm text-gray-600">
+                I accept the{" "}
+                <span className="text-brand font-semibold cursor-pointer hover:underline">
+                  Terms and Conditions
+                </span>
+              </label>
+            </div>
+            {errors.acceptTerms && (
+              <p className="text-red-500 text-xs">{errors.acceptTerms.message}</p>
+            )}
+
+            {/* Submit */}
+            <button
+              type="submit"
+              id="register-submit-btn"
+              disabled={isLoading || isSubmitting}
+              className="btn-primary w-full py-3 text-sm mt-2"
+            >
+              {isLoading || isSubmitting ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                  </svg>
+                  Creating account...
+                </span>
+              ) : (
+                "Create account"
+              )}
+            </button>
+          </form>
+
+          <p className="text-center text-sm text-gray-500 mt-6">
+            Already have an account?{" "}
+            <Link to="/login" className="text-brand font-semibold hover:underline">
+              Sign in
+            </Link>
+          </p>
         </div>
-      </section>
+      </div>
     </div>
   );
 };
+
 export default Register;

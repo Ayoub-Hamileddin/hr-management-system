@@ -1,32 +1,28 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { navLinks } from "../../data/menuData";
-import { FiChevronDown, FiChevronLeft } from "react-icons/fi";
 
 const SidebarItems = () => {
   return (
-    <nav className="flex flex-col gap-3 ">
-      {navLinks.map(({ path, Icon, id, label, hasArrow }) => (
+    <nav className="flex flex-col gap-1 px-3">
+      {navLinks.map(({ path, Icon, id, label, end }) => (
         <NavLink
           to={path}
           key={id}
+          end={end}
           className={({ isActive }) =>
-            ` group flex items-center justify-between p-3 rounded-xl transition-all hover:bg-green-100 hover:text-green-700 hover:shadow-lg hover
-            ${
+            `group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 ${
               isActive
-                ? "bg-green-100 text-green-700 shadow-lg "
-                : "text-gray- hover:text-gary-100"
+                ? "bg-brand-50 text-brand"
+                : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
             }`
           }
         >
-          <div className="flex  items-center gap-2  ">
-            <Icon
-              className="text-gray-400 group-hover:text-green-700  "
-              size={22}
-            />
-            <p className="font-sans font-semibold text-sm">{label}</p>
-          </div>
-          {hasArrow && <FiChevronLeft size={16} />}
+          <Icon
+            size={19}
+            className="shrink-0 transition-colors duration-150"
+          />
+          <span>{label}</span>
         </NavLink>
       ))}
     </nav>

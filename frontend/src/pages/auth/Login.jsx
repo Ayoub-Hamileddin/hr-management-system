@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLoginMutation } from "../../features/auth/authApi";
 import { setCredentials } from "../../features/auth/authSlice";
 import { useDispatch } from "react-redux";
@@ -8,15 +8,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
 import { handleServerErrors } from "../../helper/handleServerErrors";
 import { toast } from "sonner";
+import { FiEye, FiEyeOff, FiMail, FiLock } from "react-icons/fi";
 
 const Login = () => {
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     register,
     handleSubmit,
-    setErrors,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(loginSchema),
@@ -27,121 +30,194 @@ const Login = () => {
       const credentials = await login({
         email: data.email,
         password: data.password,
-      });
+      }).unwrap();
       dispatch(setCredentials({ ...credentials }));
-      toast.success("Login Successfuly");
+      toast.success("Logged in successfully!");
       navigate("/dashboard");
     } catch (error) {
-      console.log(error);
-
-      handleServerErrors(error, setErrors, toast);
+      handleServerErrors(error, setError, toast);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0  ">
-        <div className="flex flex-col justify-center p-8 md:p-14">
-          <span className="mb-3 text-4xl font-bold">Welcome Back</span>
-          <span className="font-light text-gray-400 mb-8">
-            Welcome Back ! Please Enter Your Details
-          </span>
-          {/* form */}
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mt-4">
-              <span className="mb-2 text-base">Email</span>
-              <input
-                {...register("email")}
-                type="email"
-                name="email"
-                id="email"
-                className="w-full p-2 rounded-md border border-gray-300 placeholder:font-light placeholder:text-gray-500"
-                placeholder="name@company.com"
-                required=""
-              />
+    <div className="min-h-screen flex font-sans">
+      {/* Left Panel — Form */}
+      <div className="flex-1 flex flex-col justify-center items-center px-8 py-12 bg-white">
+        <div className="w-full max-w-md">
+          {/* Logo */}
+          <div className="flex items-center gap-2 mb-10">
+            <div className="w-9 h-9 bg-brand rounded-lg flex items-center justify-center">
+              <span className="text-white font-extrabold text-lg">H</span>
             </div>
-            {errors.email && (
-              <span className="text-red-600 font-light text-xs">
-                {errors.email.message}
-              </span>
-            )}
-            <div className="mt-4">
-              <span className="mb-2 text-base">Password</span>
-              <input
-                {...register("password")}
-                type="password"
-                name="password"
-                id="password"
-                placeholder="••••••••"
-                className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
-                required=""
-              />
-            </div>
-            {errors.password && (
-              <span className="text-red-600 font-light text-xs">
-                {errors.password.message}
-              </span>
-            )}
-            <div className="flex justify-between w-full pt-4">
-              <div className="mr-24">
-                <input
-                  {...register("acceptTerms")}
-                  id="terms"
-                  aria-describedby="terms"
-                  type="checkbox"
-                  required=""
-                  className="mr-2"
+            <span className="text-xl font-bold text-gray-900">HRDashboard</span>
+          </div>
+
+          <h1 className="text-3xl font-extrabold text-gray-900 mb-2">
+            Welcome back 👋
+          </h1>
+          <p className="text-gray-500 text-sm mb-8">
+            Sign in to your account to continue managing your team.
+          </p>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Email address
+              </label>
+              <div className="relative">
+                <FiMail
+                  size={16}
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
                 />
-                <span className="text-base">remember for 30 days </span>
+                <input
+                  {...register("email")}
+                  type="email"
+                  id="email"
+                  placeholder="name@company.com"
+                  className="input-field pl-10"
+                />
               </div>
-              <span className="font-bold text-base underline">
-                Forgot password{" "}
-              </span>
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
-            {errors.acceptTerms && (
-              <span className="text-red-600 font-light text-xs">
-                {errors.acceptTerms.message}
-              </span>
-            )}
-            <button
-              disabled={isLoading || isSubmitting}
-              className="w-full bg-black text-white text-md font-semibold p-2  mt-5 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-300 "
-            >
-              {isSubmitting ? "Sign In ..." : "Sign In"}
-            </button>
-            <button className="w-full border border-gray-300 text-md font-semibold p-2 rounded-lg mb-6 hover:bg-black hover:text-white">
-              <img
-                src="src/assets/images/google.svg"
-                alt="google-svg"
-                className="w-6 h-6  inline mr-2"
+
+            {/* Password */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-sm font-semibold text-gray-700">
+                  Password
+                </label>
+                <button
+                  type="button"
+                  className="text-xs font-semibold text-brand hover:underline"
+                >
+                  Forgot password?
+                </button>
+              </div>
+              <div className="relative">
+                <FiLock
+                  size={16}
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                />
+                <input
+                  {...register("password")}
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  placeholder="••••••••"
+                  className="input-field pl-10 pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+
+            {/* Remember me */}
+            <div className="flex items-center gap-2">
+              <input
+                {...register("acceptTerms")}
+                id="terms"
+                type="checkbox"
+                className="w-4 h-4 rounded border-gray-300 text-brand focus:ring-brand"
               />
-              Sign In with Google
+              <label htmlFor="terms" className="text-sm text-gray-600">
+                Remember me for 30 days
+              </label>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              id="login-submit-btn"
+              disabled={isLoading || isSubmitting}
+              className="btn-primary w-full py-3 text-sm"
+            >
+              {isLoading || isSubmitting ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg
+                    className="animate-spin w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8z"
+                    />
+                  </svg>
+                  Signing in...
+                </span>
+              ) : (
+                "Sign in"
+              )}
             </button>
           </form>
-          {/* end form */}
-          <div className="text-center text-gray-400">
-            Dont'have an account ?
-            <span className="font-bold text-black underline">
-              {" "}
-              Sign up for free
-            </span>
-          </div>
+
+          <p className="text-center text-sm text-gray-500 mt-6">
+            Don&apos;t have an account?{" "}
+            <Link
+              to="/register"
+              className="text-brand font-semibold hover:underline"
+            >
+              Create one free
+            </Link>
+          </p>
         </div>
-        <div className="relative">
-          <img
-            src="src/assets/images/hr-bg2.png"
-            alt=""
-            className="w-[400px] h-full hidden rounded-r-2xl md:block object-cover"
-          />
-          {/* text on image */}
-          <div
-            className="absolute hidden bottom-10 right-6 p-6 bg-black bg-opacity-30 backdrop-blur-sm
-            rounded drop-shadow-lg md:block font-bold text-center
-          "
-          >
-            <span className="text-white text-xl">
-              Let' s manage your employees
-            </span>
+      </div>
+
+      {/* Right Panel — Decorative */}
+      <div className="hidden lg:flex flex-1 bg-gradient-to-br from-brand-600 via-brand to-brand-400 flex-col justify-center items-center p-12 relative overflow-hidden">
+        {/* Background circles */}
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full" />
+        <div className="absolute -bottom-32 -left-16 w-80 h-80 bg-white/10 rounded-full" />
+
+        <div className="relative z-10 text-center max-w-sm">
+          <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
+            <span className="text-4xl font-extrabold text-white">H</span>
+          </div>
+          <h2 className="text-3xl font-extrabold text-white mb-4 leading-tight">
+            Manage your team with confidence
+          </h2>
+          <p className="text-white/80 text-sm leading-relaxed">
+            Track employees, handle payroll, manage time-off requests, and monitor performance — all in one place.
+          </p>
+
+          {/* Stats */}
+          <div className="mt-10 grid grid-cols-3 gap-4">
+            {[
+              { value: "3.5K+", label: "Employees" },
+              { value: "98%", label: "Satisfaction" },
+              { value: "6+", label: "Modules" },
+            ].map((s) => (
+              <div
+                key={s.label}
+                className="bg-white/20 backdrop-blur-sm rounded-xl p-3"
+              >
+                <p className="text-white font-extrabold text-xl">{s.value}</p>
+                <p className="text-white/70 text-xs mt-0.5">{s.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
